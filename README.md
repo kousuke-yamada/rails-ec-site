@@ -1,2 +1,3 @@
 # rails-ec-site
-RailsでのECサイト構築
+
+Rails での EC サイト構築
