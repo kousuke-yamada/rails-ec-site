@@ -1,15 +1,17 @@
 # 概要
-Rails での EC サイト構築
 
-***
+Rails での EC サイト構築（プッシュ確認のためにお試しで変更）
+
+---
 
 # 環境構築
-1. まずはdockerの導入
+
+1. まずは docker の導入
 
 https://github.com/shotaimai66/readme-develop/blob/main/Docker%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB.md
 
+2. docker の導入ができたら、以下のコマンドを打ち込んでいく。(アプリのディレクトリ内に cd コマンドで移動してから)
 
-2. dockerの導入ができたら、以下のコマンドを打ち込んでいく。(アプリのディレクトリ内にcdコマンドで移動してから)
 ```
 # イメージのビルド
 docker-compose build
@@ -24,9 +26,10 @@ docker-compose run --rm app bin/rails db:setup
 docker-compose up
 ```
 
-***
+---
 
 # 開発コマンド
+
 ```
 # コンテナ起動
 docker-compose up
