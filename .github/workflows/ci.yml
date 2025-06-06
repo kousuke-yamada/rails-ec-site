@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
@@ -41,14 +41,16 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
-        image: postgres
+      mysql:
+        image: mysql:8.0
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          MYSQL_ROOT_PASSWORD: mysql # MySQL環境変数
+          MYSQL_DATABASE: test_database # テスト用データベース作成
+          MYSQL_USER: test_user # テスト用ユーザー作成
+          MYSQL_PASSWORD: test_password # テスト用パスワード
         ports:
-          - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3 # ヘルスチェックコマンド変更
 
       # redis:
       #   image: redis
@@ -72,7 +74,7 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          DATABASE_URL: mysql2://test_user:test_password@127.0.0.1:3306/test_database # PostgreSQL URL → MySQL URL
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test test:system
 
