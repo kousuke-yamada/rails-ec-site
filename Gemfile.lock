@@ -136,6 +136,7 @@ GEM
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
+    mysql2 (0.5.6)
     net-imap (0.5.8)
       date
       net-protocol
@@ -150,13 +151,14 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.8-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.18.8-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
     parallel (1.27.0)
     parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.9)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -262,6 +264,13 @@ GEM
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.7)
+    tailwindcss-rails (4.2.3)
+      railties (>= 7.0.0)
+      tailwindcss-ruby (~> 4.0)
+    tailwindcss-ruby (4.1.8-aarch64-linux-gnu)
+    tailwindcss-ruby (4.1.8-arm64-darwin)
+    tailwindcss-ruby (4.1.8-x86_64-darwin)
+    tailwindcss-ruby (4.1.8-x86_64-linux-gnu)
     thor (1.3.2)
     timeout (0.4.3)
     turbo-rails (2.0.13)
@@ -290,6 +299,7 @@ GEM
 PLATFORMS
   aarch64-linux
   arm64-darwin-24
+  x86_64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
@@ -300,13 +310,14 @@ DEPENDENCIES
   debug
   jbuilder
   jsbundling-rails
-  pg (~> 1.1)
+  mysql2
   puma (>= 5.0)
   rails (~> 7.2.2, >= 7.2.2.1)
   rubocop-rails-omakase
   selenium-webdriver
   sprockets-rails
   stimulus-rails
+  tailwindcss-rails
   turbo-rails
   tzinfo-data
   web-console

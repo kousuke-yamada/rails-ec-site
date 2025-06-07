@@ -1,0 +1,86 @@
+<!-- app/views/home/top.html.erb -->
+<header class="bg-white p-4 flex items-center justify-between shadow-md">
+  <!--<div class="flex-shrink-0">
+    <img src="メルカリのロゴ.png" alt="メルカリロゴ" class="h-8"> </div>-->
+
+  <div class="flex-grow max-w-lg mx-auto relative">
+    <input type="text" placeholder="なにをお探しですか？" class="w-full border border-gray-300 rounded-md py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    </button>
+  </div>
+
+  <div class="flex items-center space-x-4 ml-auto">
+    <button class="text-gray-600 hover:text-gray-800">
+      R T
+    </button>
+    <button class="text-gray-600 hover:text-gray-800">
+      <span class="relative">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.001 2.001 0 0118 14.28V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.366 6 8.361 6 11v3.28a2.001 2.001 0 01-.595 1.405L4 17h5m6 0a3 3 0 11-6 0m6 0H9"></path></svg>
+        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">9</span>
+      </span>
+    </button>
+    <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md">
+      出品
+    </button>
+  </div>
+</header>
+<body class="bg-gray-100">
+
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">商品一覧</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <img src="https://via.placeholder.com/600x400?text=商品画像1" alt="商品画像1" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-2">
+            <a href="#" class="hover:text-blue-600">ダミー商品A</a>
+          </h2>
+          <p class="text-gray-700 mb-2">¥12,800</p>
+          <p class="text-gray-500 text-sm">これはダミーの商品Aの説明文です。商品の特徴や魅力を簡潔に伝え...</p>
+          <a href="#" class="mt-4 inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">詳細を見る</a>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <img src="https://via.placeholder.com/600x400?text=商品画像2" alt="商品画像2" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-2">
+            <a href="#" class="hover:text-blue-600">ダミー商品B（長めの名前）</a>
+          </h2>
+          <p class="text-gray-700 mb-2">¥5,980</p>
+          <p class="text-gray-500 text-sm">機能性に優れた商品Bです。最新技術を搭載し、あなたの生活を豊かにします...</p>
+          <a href="#" class="mt-4 inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">詳細を見る</a>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <img src="https://via.placeholder.com/600x400?text=商品画像3" alt="商品画像3" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-2">
+            <a href="#" class="hover:text-blue-600">ダミー商品C</a>
+          </h2>
+          <p class="text-gray-700 mb-2">¥3,200</p>
+          <p class="text-gray-500 text-sm">シンプルで使いやすい商品C。どんなシーンにもマッチするデザインが人気...</p>
+          <a href="#" class="mt-4 inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">詳細を見る</a>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <img src="https://via.placeholder.com/600x400?text=商品画像4" alt="商品画像4" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-2">
+            <a href="#" class="hover:text-blue-600">限定品ダミー商品D</a>
+          </h2>
+          <p class="text-gray-700 mb-2">¥29,800</p>
+          <p class="text-gray-500 text-sm">数量限定のプレミアム商品D。お見逃しなく！</p>
+          <a href="#" class="mt-4 inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">詳細を見る</a>
+        </div>
+      </div>
+
+      </div>
+  </div>
+
+</body>
