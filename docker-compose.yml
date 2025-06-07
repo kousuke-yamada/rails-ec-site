@@ -26,4 +26,4 @@ services:
       - "3306:3306" # ホストからMySQLにアクセスしたい場合に開放（開発時便利）
 
 volumes:
-  db_data:
+  mysql_data:
