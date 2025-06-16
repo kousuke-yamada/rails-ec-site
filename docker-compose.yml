@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.9"
 services:
   app:
     build:
@@ -9,21 +9,23 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db # MySQLサービスに依存
+      - db
     environment:
       RAILS_ENV: development
-      DATABASE_URL: mysql2://root:password@db:3306/myapp_development # MySQL接続情報
+      DATABASE_URL: mysql2://root:password@db:3306/myapp_development
+
+    command: sh -c "rm -f tmp/pids/server.pid && bin/rails server -b 0.0.0.0"
 
   db:
-    image: mysql:8.0 # MySQLのイメージ
+    image: mysql:8.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: password # ルートユーザーのパスワード
-      MYSQL_DATABASE: myapp_development # データベース名
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: myapp_development
     volumes:
-      - db_data:/var/lib/mysql # MySQLのデータ永続化用
+      - mysql_data:/var/lib/mysql
     ports:
-      - "3306:3306" # ホストからMySQLにアクセスしたい場合に開放（開発時便利）
+      - "3306:3306"
 
 volumes:
   mysql_data:
