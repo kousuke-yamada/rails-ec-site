@@ -19,7 +19,8 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Scan for common Rails security vulnerabilities using static analysis
+      - name:
+          Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
 
   lint:
@@ -50,7 +51,8 @@ jobs:
           MYSQL_PASSWORD: test_password # テスト用パスワード
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3 # ヘルスチェックコマンド変更
+        options: --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s --health-timeout=5s --health-retries=3 # ヘルスチェックコマンド変更
 
       # redis:
       #   image: redis
@@ -60,7 +62,9 @@ jobs:
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips postgresql-client
+        run:
+          sudo apt-get update && sudo apt-get install --no-install-recommends -y
+          google-chrome-stable curl libjemalloc2 libvips postgresql-client
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -70,6 +74,18 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # or your project version
+          cache: "yarn"
+
+      - name: Install Node dependencies
+        run: yarn install --immutable
+
+      - name: Build Tailwind CSS
+        run: yarn build:css
 
       - name: Run tests
         env:
