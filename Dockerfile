@@ -1,13 +1,17 @@
 FROM ruby:3.2.8-slim
 
-# 必要なパッケージをインストール（yarnのリポジトリ追加）
+# 必要なパッケージをインストール
 RUN apt-get update -qq && apt-get install -y \
   curl \
   gnupg \
   build-essential \
   default-libmysqlclient-dev \
   libyaml-dev \
-  nodejs
+  default-libmysqlclient-dev # ★ この行を追加してください
+
+# Node.js 18.x をインストール
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
 
 # Yarnの公式APTリポジトリを追加
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -33,4 +37,4 @@ COPY . .
 EXPOSE 3000
 
 # デフォルトコマンド
-CMD ["bin/rails", "server", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]

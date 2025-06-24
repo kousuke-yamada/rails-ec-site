@@ -1,29 +1,31 @@
 version: "3.9"
 services:
-  db:
-    image: mysql:8.0
-    volumes:
-      - mysql_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: myapp_development
-      MYSQL_USER: myapp
-      MYSQL_PASSWORD: password
-    ports:
-      - "3306:3306"
-
   app:
-    build: .
-    command: bin/rails server -b 0.0.0.0
-    volumes:
-      - .:/app
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    volumes:
+      - .:/app
     depends_on:
       - db
     environment:
-      DATABASE_URL: mysql2://root:password@db:3306/myapp_development
       RAILS_ENV: development
+      DATABASE_URL: mysql2://root:password@db:3306/myapp_development
+
+    command: sh -c "rm -f tmp/pids/server.pid && bin/rails server -b 0.0.0.0"
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: myapp_development
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
 
 volumes:
   mysql_data:
