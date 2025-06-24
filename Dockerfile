@@ -6,8 +6,7 @@ RUN apt-get update -qq && apt-get install -y \
   gnupg \
   build-essential \
   default-libmysqlclient-dev \
-  libyaml-dev \
-  default-libmysqlclient-dev # ★ この行を追加してください
+  libyaml-dev
 
 # Node.js 18.x をインストール
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
@@ -24,7 +23,6 @@ WORKDIR /app
 
 # Yarn/Node/JSパッケージ
 COPY package.json yarn.lock ./
-RUN yarn install
 
 # Gemfile をコピーして bundle install
 COPY Gemfile Gemfile.lock ./
