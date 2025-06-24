@@ -129,7 +129,11 @@ jobs:
           DATABASE_URL: mysql2://test_user:test_password@127.0.0.1:3306/test_database # PostgreSQL URL → MySQL URL
           # REDIS_URL: redis://localhost:6379/0
           TAILWINDCSS_RAILS_SKIP_BUILD: "true"
-        run: bin/rails db:test:prepare test test:system
+        # run: bin/rails db:test:prepare test test:system
+        run: |
+          bin/rails db:test:prepare
+          bin/rails test
+          bin/rails test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
