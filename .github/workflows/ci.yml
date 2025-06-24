@@ -81,6 +81,25 @@ jobs:
           node-version: "20" # or your project version
           cache: "yarn"
 
+      - name: Debug - Check Gem Status and Rails Config
+        run: |
+          echo "--- Checking bundle list ---"
+          bundle list | grep tailwindcss-rails || echo "tailwindcss-rails not found by bundle list"
+
+          echo "--- Checking bundle show ---"
+          bundle show tailwindcss-rails || echo "tailwindcss-rails gem path not found by bundle show"
+
+          echo "--- Checking Rails.application.config.tailwindcss existence ---"
+
+          bundle exec rails runner "puts Rails.application.config.respond_to?(:tailwindcss) ? 'config.tailwindcss exists' : 'config.tailwindcss does NOT exist'" || echo "rails runner failed to check config.tailwindcss"
+
+          echo "--- Checking Tailwindcss::Rails module definition ---"
+
+          bundle exec rails runner "puts defined?(Tailwindcss::Rails) ? 'Tailwindcss::Rails module is defined' : 'Tailwindcss::Rails module is NOT defined'" || echo "rails runner failed to check Tailwindcss::Rails module"
+
+          echo "--- Checking TAILWINDCSS_RAILS_SKIP_BUILD environment variable ---"
+          echo "TAILWINDCSS_RAILS_SKIP_BUILD value: ${TAILWINDCSS_RAILS_SKIP_BUILD}"
+      # --- ↑↑↑ ここまでデバッグ用ステップを追加 ↑↑↑ ---
       - name: Install Node dependencies
         run: yarn install --immutable
 
