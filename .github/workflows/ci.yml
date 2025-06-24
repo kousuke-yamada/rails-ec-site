@@ -84,14 +84,17 @@ jobs:
       - name: Install Node dependencies
         run: yarn install --immutable
 
-      - name: Build Tailwind CSS
-        run: yarn build:css
+      - name: Build Frontend Assets (JS & CSS)
+        run: |
+          yarn build
+          yarn build:css
 
       - name: Run tests
         env:
           RAILS_ENV: test
           DATABASE_URL: mysql2://test_user:test_password@127.0.0.1:3306/test_database # PostgreSQL URL → MySQL URL
           # REDIS_URL: redis://localhost:6379/0
+          TAILWINDCSS_RAILS_SKIP_BUILD: "true"
         run: bin/rails db:test:prepare test test:system
 
       - name: Keep screenshots from failed system tests
