@@ -1,46 +1,186 @@
 <!-- app/views/home/top.html.erb -->
 <!DOCTYPE html>
-<html>
-<body>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TANITSUBO-YAMA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- ヘッダー -->
+    <header class="bg-white shadow-lg border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex items-center">
+                <!-- ロゴ -->
+                <div class="flex-shrink-0 mr-8">
+                    <h1 class="text-2xl font-bold text-gray-900">TANITSUBO—YAMA</h1>
+                </div>
+                
+                <!-- 検索バー -->
+                <div class="flex-1 max-w-2xl mr-8">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            placeholder="なにをお探しですか？" 
+                            class="w-full border border-gray-300 rounded-md py-2 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition duration-200"
+                        >
+                        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- ナビゲーション -->
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-700 hover:text-black font-medium px-4 py-2 transition duration-200">
+                        ログイン
+                    </button>
+                    <button class="bg-red-500 text-white font-medium py-2 px-6 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200">
+                        出品
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
 
-  <header class="bg-white p-4 flex items-center shadow-md">
-    <div class="relative mr-8"> <input type="text" placeholder="なにをお探しですか？" class="w-72 border border-gray-300 rounded-md py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-      </button>
-    </div>
+    <!-- メインコンテンツ -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- ページタイトル -->
+        <div class="mb-8">
+            <h2 class="text-4xl font-bold text-gray-900 mb-2">商品一覧</h2>
+            <div class="w-24 h-1 bg-black"></div>
+        </div>
 
-    <div class="flex items-center space-x-4 ml-auto">
-      <button class="text-gray-600 hover:text-gray-800">
-        ログイン
-      </button>
-      <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md">
-        出品
-      </button>
-      </div>
-  </header>
-  <div class="container mx-auto px-4 py-8"> <div class="flex">
+        <!-- 商品グリッド -->
+        <div class="grid grid-cols-4 gap-6">
+            <!-- 商品カード1 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                <div class="relative">
+                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-500 text-sm">商品画像A</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">ダミー商品A</h3>
+                    <p class="text-2xl font-bold text-black mb-3">¥12,800</p>
+                    <p class="text-gray-600 mb-4 line-clamp-2">これはダミーの商品Aの説明文です。商品の詳細な情報をここに記載します。</p>
+                    <button class="w-full bg-black text-white font-medium py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
+                        詳細を見る
+                    </button>
+                </div>
+            </div>
 
-      <main class="w-3/4 p-4">
-        <h1 class="text-2xl font-bold mb-6">商品一覧</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="border border-gray-200 rounded-lg shadow-md p-4">
-            <img src="商品画像1.png" alt="ダミー商品A" class="w-full h-48 object-cover mb-4 rounded-md">
-            <h2 class="text-lg font-semibold mb-1">ダミー商品A</h2>
-            <p class="text-xl font-bold text-red-600 mb-2">¥12,800</p>
-            <p class="text-gray-700 mb-2">これはダミーの商品Aの説明文です。</p>
-            <a href="#" class="text-blue-600 hover:underline mt-2 inline-block">詳細を見る</a>
-          </div>
-          <div class="border border-gray-200 rounded-lg shadow-md p-4">
-            <img src="商品画像2.png" alt="ダミー商品B" class="w-full h-48 object-cover mb-4 rounded-md">
-            <h2 class="text-lg font-semibold mb-1">ダミー商品B (長めの名前)</h2>
-            <p class="text-xl font-bold text-red-600 mb-2">¥5,980</p>
-            <p class="text-gray-700 mb-2">機能性に優れた商品Bです。</p>
-            <a href="#" class="text-blue-600 hover:underline mt-2 inline-block">詳細を見る</a>
-          </div>
-          </div>
-      </main>
-    </div>
-  </div>
-  </body>
+            <!-- 商品カード2 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                <div class="relative">
+                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-500 text-sm">商品画像B</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">ダミー商品B (長めの名前)</h3>
+                    <p class="text-2xl font-bold text-black mb-3">¥5,980</p>
+                    <p class="text-gray-600 mb-4 line-clamp-2">機能性に優れた商品Bです。高品質な素材を使用しています。</p>
+                    <button class="w-full bg-black text-white font-medium py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
+                        詳細を見る
+                    </button>
+                </div>
+            </div>
+
+            <!-- 商品カード3 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                <div class="relative">
+                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-500 text-sm">商品画像C</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">ダミー商品C</h3>
+                    <p class="text-2xl font-bold text-black mb-3">¥8,500</p>
+                    <p class="text-gray-600 mb-4 line-clamp-2">人気の商品Cです。多くのお客様にご愛用いただいています。</p>
+                    <button class="w-full bg-black text-white font-medium py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
+                        詳細を見る
+                    </button>
+                </div>
+            </div>
+
+            <!-- 商品カード4 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                <div class="relative">
+                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-500 text-sm">商品画像D</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">ダミー商品D</h3>
+                    <p class="text-2xl font-bold text-black mb-3">¥15,800</p>
+                    <p class="text-gray-600 mb-4 line-clamp-2">プレミアムな商品Dです。特別な仕様でお作りしています。</p>
+                    <button class="w-full bg-black text-white font-medium py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
+                        詳細を見る
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- もっと見るボタン -->
+        <div class="text-center mt-12">
+            <button class="bg-white text-black border-2 border-black font-medium py-3 px-8 rounded-md hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
+                もっと見る
+            </button>
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">TANITSUBO—YAMA</h3>
+                <div class="flex justify-center space-x-8">
+                    <a href="#" class="text-gray-600 hover:text-black transition duration-200">お問い合わせ</a>
+                    <a href="#" class="text-gray-600 hover:text-black transition duration-200">利用規約</a>
+                    <a href="#" class="text-gray-600 hover:text-black transition duration-200">プライバシーポリシー</a>
+                </div>
+                <p class="text-gray-500 text-sm mt-4">&copy; 2025 TANITSUBO-YAMA. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 検索機能のプレースホルダー
+        document.querySelector('input[type="text"]').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                alert('検索機能はバックエンドの実装が必要です');
+            }
+        });
+
+        // ボタンクリックイベント
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.textContent.includes('詳細を見る')) {
+                    e.preventDefault();
+                    alert('商品詳細ページはまだ実装されていません');
+                } else if (this.textContent.includes('ログイン')) {
+                    e.preventDefault();
+                    alert('ログインページに遷移します');
+                } else if (this.textContent.includes('出品')) {
+                    e.preventDefault();
+                    alert('出品ページはまだ実装されていません');
+                } else if (this.textContent.includes('もっと見る')) {
+                    e.preventDefault();
+                    alert('さらなる商品読み込み機能はバックエンドの実装が必要です');
+                }
+            });
+        });
+    </script>
+</body>
 </html>
