@@ -1,15 +1,30 @@
 class ProductsController < ApplicationController
-  def listing
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :purchase]
+
+  def index
+    @products = Product.all
   end
-  
+
+  def listing
+    @products = Product.all
+  end
+
   def purchase
     # @product = Product.find(params[:id]) # 実際のデータを使う場合
   end
 
   def new
+    @product = Product.new
   end
 
   def create
+    @product = Product.new(product_params)
+    
+    if @product.save
+      redirect_to @product, notice: 'Product was successfully created.'
+    else
+      render :new
+    end
   end
 
   def show
@@ -19,14 +34,25 @@ class ProductsController < ApplicationController
   end
 
   def update
+    if @product.update(product_params)
+      redirect_to @product, notice: 'Product was successfully updated.'
+    else
+      render :edit
+    end
   end
 
   def destroy
+    @product.destroy
+    redirect_to products_path, notice: 'Product was successfully deleted.'
   end
 
-  def index
-    # 商品一覧ページ
-    @products = [] # 実際のデータがある場合は Product.all など
+  private
+
+  def set_product
+    @product = Product.find(params[:id])
   end
 
+  def product_params
+    params.require(:product).permit(:name, :price, :condition_id, :shipping_fee_payer_id, :prefecture_id, :shipping_day_id, :category_id, :user_id)
+  end
 end

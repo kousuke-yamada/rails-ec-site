@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     @user_name = "田中 太郎"
     @user_rating = 4.8
     @review_count = 156
-    
+
     @products = [
       { name: "iPhone 14 Pro 128GB", price: 98000, status: "出品中" },
       { name: "ユニクロ セーター", price: 2500, status: "売り切れ" },
