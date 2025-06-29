@@ -71,6 +71,7 @@ docker-compose run --rm app bin/*****
 ```
 # rubocop実行（全実行）全ての.rbファイルが対象
 docker-compose run --rm app bundle exec rubocop
+
 # rubocop実行（個別実行）例：app/models/user.rbのみチェックしたい場合
 docker-compose run --rm app bundle exec rubocop app/models/user.rb
 
