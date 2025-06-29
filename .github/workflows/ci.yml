@@ -17,9 +17,15 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
-          bundler-cache: true
+          bundler-cache: false
 
-      - name: Scan for common Rails security vulnerabilities using static analysis
+      - name: Install Ruby dependencies
+        run: |
+          bundle config set --local deployment false
+          bundle install --jobs 4 --retry 3
+
+      - name:
+          Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
 
   lint:
@@ -32,7 +38,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install Ruby dependencies
+        run: |
+          bundle config set --local deployment false
+          bundle install --jobs 4 --retry 3
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
@@ -50,7 +61,8 @@ jobs:
           MYSQL_PASSWORD: test_password # テスト用パスワード
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3 # ヘルスチェックコマンド変更
+        options: --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s --health-timeout=5s --health-retries=3 # ヘルスチェックコマンド変更
 
       # redis:
       #   image: redis
@@ -60,7 +72,9 @@ jobs:
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips postgresql-client
+        run:
+          sudo apt-get update && sudo apt-get install --no-install-recommends -y
+          google-chrome-stable curl libjemalloc2 libvips postgresql-client
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -69,14 +83,58 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install Ruby dependencies
+        run: |
+          bundle config set --local deployment false
+          bundle install --jobs 4 --retry 3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # or your project version
+          cache: "yarn"
+
+      - name: Debug - Check Gem Status and Rails Config
+        run: |
+          echo "--- Checking bundle list ---"
+          bundle list | grep tailwindcss-rails || echo "tailwindcss-rails not found by bundle list"
+
+          echo "--- Checking bundle show ---"
+          bundle show tailwindcss-rails || echo "tailwindcss-rails gem path not found by bundle show"
+
+          echo "--- Checking Rails.application.config.tailwindcss existence ---"
+
+          bundle exec rails runner "puts Rails.application.config.respond_to?(:tailwindcss) ? 'config.tailwindcss exists' : 'config.tailwindcss does NOT exist'" || echo "rails runner failed to check config.tailwindcss"
+
+          echo "--- Checking Tailwindcss::Rails module definition ---"
+
+          bundle exec rails runner "puts defined?(Tailwindcss::Rails) ? 'Tailwindcss::Rails module is defined' : 'Tailwindcss::Rails module is NOT defined'" || echo "rails runner failed to check Tailwindcss::Rails module"
+
+          echo "--- Checking TAILWINDCSS_RAILS_SKIP_BUILD environment variable ---"
+          echo "TAILWINDCSS_RAILS_SKIP_BUILD value: ${TAILWINDCSS_RAILS_SKIP_BUILD}"
+      # --- ↑↑↑ ここまでデバッグ用ステップを追加 ↑↑↑ ---
+      - name: Install Node dependencies
+        run: yarn install --immutable
+
+      - name: Build Frontend Assets (JS & CSS)
+        run: |
+          yarn build
+          yarn build:css
+          bin/rails tailwindcss:build
 
       - name: Run tests
         env:
           RAILS_ENV: test
           DATABASE_URL: mysql2://test_user:test_password@127.0.0.1:3306/test_database # PostgreSQL URL → MySQL URL
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+          TAILWINDCSS_RAILS_SKIP_BUILD: "true"
+        # run: bin/rails db:test:prepare test test:system
+        run: |
+          bin/rails db:test:prepare
+          bin/rails test
+          bin/rails test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
