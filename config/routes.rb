@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  get "logins/new"
+  devise_for :users
+  get "logins/new", as: :logins_new
   get "home/top"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

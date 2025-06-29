@@ -1,4 +1,119 @@
-<div>
-  <h1 class="font-bold text-4xl">Logins#new</h1>
-  <p>Find me in app/views/logins/new.html.erb</p>
-</div>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TANITSUBO-YAMA ログイン</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+        <!-- ロゴ/タイトル -->
+        <div class="text-center mb-8">
+            <h1 class="text-5xl font-bold text-gray-900 mb-15">TANITSUBO—YAMA</h1>
+        </div>
+
+        <!-- ログインフォーム -->
+        <form class="space-y-6">
+
+            <!-- ログインボタン -->
+            <button 
+                type="submit" 
+                class="w-full bg-black text-white py-3 px-4 rounded-md font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200"
+            >
+                ログイン
+            </button>
+        </form>
+
+        <!-- 新規アカウント作成リンク -->
+        <div class="mt-6 text-center">
+        <button id="open-signup-modal" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+            新規アカウント作成
+        </button>
+    </div>
+
+    <div id="signup-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md relative">
+            <h2 class="text-2xl font-bold mb-6 text-center">新規アカウント作成</h2>
+            <button id="close-signup-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+
+            <form action="/register" method="POST">
+                <div class="mb-4">
+                    <label for="modal-name" class="block text-gray-700 text-sm font-bold mb-2">名前:</label>
+                    <input type="text" id="modal-name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modal-email" class="block text-gray-700 text-sm font-bold mb-2">メールアドレス:</label>
+                    <input type="email" id="modal-email" name="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modal-phone" class="block text-gray-700 text-sm font-bold mb-2">電話番号:</label>
+                    <input type="tel" id="modal-phone" name="phone" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="例: 09012345678">
+                </div>
+                <div class="mb-6">
+                    <label for="modal-password" class="block text-gray-700 text-sm font-bold mb-2">パスワード:</label>
+                    <input type="password" id="modal-password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="flex items-center justify-center">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        登録
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // DOMContentLoaded: HTMLの読み込みが完了してからJavaScriptを実行するためのイベント
+        document.addEventListener('DOMContentLoaded', function() {
+            const signupModal = document.getElementById('signup-modal');
+            const openSignupModalBtn = document.getElementById('open-signup-modal');
+            const closeSignupModalBtn = document.getElementById('close-signup-modal');
+
+            // 要素が全て存在することを確認
+            if (signupModal && openSignupModalBtn && closeSignupModalBtn) {
+                // 「新規アカウント作成」ボタンクリックでモーダルを開く
+                openSignupModalBtn.addEventListener('click', function() {
+                    signupModal.classList.remove('hidden'); // 'hidden'クラスを削除して表示
+                    signupModal.classList.add('flex');    // flexboxとして表示
+                });
+
+                // 「閉じる」ボタンクリックでモーダルを閉じる
+                closeSignupModalBtn.addEventListener('click', function() {
+                    signupModal.classList.remove('flex'); // 'flex'クラスを削除
+                    signupModal.classList.add('hidden');    // 'hidden'クラスを追加して非表示
+                });
+
+                // モーダルの外側（オーバーレイ部分）をクリックで閉じる (オプション)
+                signupModal.addEventListener('click', function(e) {
+                    // クリックされた要素がモーダルのオーバーレイ自体であるか確認
+                    if (e.target === signupModal) {
+                        signupModal.classList.remove('flex');
+                        signupModal.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+        
+
+        <!-- お問い合わせリンク -->
+        <div class="mt-8 text-center">
+            <a href="#" class="inline-block px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50 transition duration-200">
+                問い合わせ
+            </a>
+        </div>
+
+    <!-- JavaScript for form handling -->
+    <script>
+        document.querySelector('button').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('ログイン機能はバックエンドの実装が必要です');
+        });
+    </script>
+</body>
+</html>
