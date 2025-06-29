@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  get "users/mypage"
+  root "products#index"
+  resources :products do
+    member do
+      get :purchase
+    end
+    collection do
+      get :listing
+    end
+  end
+
+  get "/mypage", to: "users#mypage"
   get "logins/new"
   get "home/top"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -1,0 +1,630 @@
+<% content_for :title, "商品詳細 - メルカリ" %>
+
+<%= content_for :head do %>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f8f8;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    .header {
+      background: white;
+      padding: 16px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ea352d;
+      text-decoration: none;
+    }
+    
+    .breadcrumb {
+      color: #888;
+      font-size: 14px;
+    }
+    
+    .breadcrumb a {
+      color: #888;
+      text-decoration: none;
+    }
+    
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    
+    .product-main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      background: white;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+    }
+    
+    .product-images {
+      position: relative;
+    }
+    
+    .main-image {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      border: 1px solid #eee;
+    }
+    
+    .main-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    
+    .image-thumbnails {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    
+    .thumbnail {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    
+    .thumbnail.active {
+      border-color: #ea352d;
+    }
+    
+    .thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .product-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    
+    .product-price {
+      font-size: 32px;
+      font-weight: bold;
+      color: #ea352d;
+      margin-bottom: 8px;
+    }
+    
+    .price-note {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 24px;
+    }
+    
+    .seller-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    
+    .seller-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    .seller-name {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .seller-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .star {
+      color: #ffc107;
+    }
+    
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    
+    .btn-buy {
+      background: #ea352d;
+      color: white;
+      border: none;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .btn-buy:hover {
+      background: #d32f2f;
+    }
+    
+    .btn-cart {
+      background: #666;
+      color: white;
+      border: none;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .btn-cart:hover {
+      background: #555;
+    }
+    
+    .btn-like {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: #666;
+      border: 1px solid #ddd;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-like:hover {
+      background: #f8f9fa;
+    }
+    
+    .btn-like.liked {
+      color: #ea352d;
+      border-color: #ea352d;
+    }
+    
+    .product-details {
+      background: white;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+    
+    .detail-table th,
+    .detail-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .detail-table th {
+      background: #f8f9fa;
+      font-weight: 500;
+      width: 30%;
+    }
+    
+    .description {
+      line-height: 1.8;
+      color: #555;
+      white-space: pre-line;
+    }
+    
+    .related-products {
+      background: white;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    
+    .related-item {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    
+    .related-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .related-item img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+    
+    .related-info {
+      padding: 12px;
+    }
+    
+    .related-title {
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .related-price {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ea352d;
+    }
+    
+    .safety-notice {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 24px;
+    }
+    
+    .safety-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #856404;
+    }
+    
+    .safety-text {
+      font-size: 14px;
+      color: #856404;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px 8px;
+      }
+      
+      .product-main {
+        grid-template-columns: 1fr;
+        padding: 16px;
+        gap: 24px;
+      }
+      
+      .product-title {
+        font-size: 20px;
+      }
+      
+      .product-price {
+        font-size: 28px;
+      }
+      
+      .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .detail-table th,
+      .detail-table td {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+    }
+  </style>
+<% end %>
+
+<header class="header">
+  <div class="header-content">
+    <a href="/" class="logo">メルカリ</a>
+    <div class="breadcrumb">
+      <a href="/">ホーム</a> > 
+      <a href="/categories/electronics">家電・スマホ・カメラ</a> > 
+      <a href="/categories/smartphones">スマートフォン本体</a> > 
+      iPhone 14 Pro
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- 商品メイン情報 -->
+  <div class="product-main">
+    <!-- 商品画像 -->
+    <div class="product-images">
+      <div class="main-image">
+        <img id="mainImage" src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500&h=500&fit=crop" alt="iPhone 14 Pro">
+      </div>
+      <div class="image-thumbnails">
+        <div class="thumbnail active" onclick="changeImage(this, 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=500&h=500&fit=crop')">
+          <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=80&h=80&fit=crop" alt="画像1">
+        </div>
+        <div class="thumbnail" onclick="changeImage(this, 'https://images.unsplash.com/photo-1556656793-08538906a9f8?w=500&h=500&fit=crop')">
+          <img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=80&h=80&fit=crop" alt="画像2">
+        </div>
+        <div class="thumbnail" onclick="changeImage(this, 'https://images.unsplash.com/photo-1580910051074-3eb694886505?w=500&h=500&fit=crop')">
+          <img src="https://images.unsplash.com/photo-1580910051074-3eb694886505?w=80&h=80&fit=crop" alt="画像3">
+        </div>
+        <div class="thumbnail" onclick="changeImage(this, 'https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=500&h=500&fit=crop')">
+          <img src="https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=80&h=80&fit=crop" alt="画像4">
+        </div>
+      </div>
+    </div>
+
+    <!-- 商品情報 -->
+    <div class="product-info">
+      <h1 class="product-title">iPhone 14 Pro 256GB スペースブラック SIMフリー</h1>
+      
+      <div class="product-price">¥ 145,000</div>
+      <div class="price-note">（税込）送料込み</div>
+
+      <!-- 出品者情報 -->
+      <div class="seller-info">
+        <div class="seller-avatar">👤</div>
+        <div>
+          <div class="seller-name">yamada_tech</div>
+          <div class="seller-rating">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span>4.8 (156件)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- アクションボタン -->
+      <div class="action-buttons">
+        <button class="btn-buy" onclick="buyNow()">購入手続きへ</button>
+        <button class="btn-cart" onclick="addToCart()">カートに入れる</button>
+        <button class="btn-like" id="likeBtn" onclick="toggleLike()">
+          <span id="likeIcon">♡</span>
+          <span id="likeText">いいね</span>
+          <span id="likeCount">23</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 商品詳細情報 -->
+  <div class="product-details">
+    <h2 class="section-title">商品の情報</h2>
+    
+    <table class="detail-table">
+      <tr>
+        <th>カテゴリー</th>
+        <td>家電・スマホ・カメラ > スマートフォン本体</td>
+      </tr>
+      <tr>
+        <th>ブランド</th>
+        <td>Apple</td>
+      </tr>
+      <tr>
+        <th>商品の状態</th>
+        <td>目立った傷や汚れなし</td>
+      </tr>
+      <tr>
+        <th>配送料の負担</th>
+        <td>送料込み（出品者負担）</td>
+      </tr>
+      <tr>
+        <th>配送の方法</th>
+        <td>らくらくメルカリ便</td>
+      </tr>
+      <tr>
+        <th>発送元の地域</th>
+        <td>東京都</td>
+      </tr>
+      <tr>
+        <th>発送までの日数</th>
+        <td>1〜2日で発送</td>
+      </tr>
+    </table>
+
+    <h3 class="section-title">商品の説明</h3>
+    <div class="description">iPhone 14 Pro 256GB スペースブラックです。
+
+2022年9月に購入し、約1年間使用しました。
+ケースと保護フィルムを付けて使用していたため、目立った傷や汚れはありません。
+
+バッテリーの最大容量は92%です。
+動作に問題はありません。
+
+付属品：
+・本体
+・外箱
+・未使用Lightning - USBケーブル
+・未使用EarPods
+
+SIMロック解除済み、ネットワーク利用制限○
+
+質問があればお気軽にコメントください。
+即購入OKです。
+
+#iPhone
+#Apple
+#スマートフォン
+#SIMフリー</div>
+  </div>
+
+  <!-- 関連商品 -->
+  <div class="related-products">
+    <h2 class="section-title">関連する商品</h2>
+    <div class="related-grid">
+      <div class="related-item" onclick="viewProduct(1)">
+        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&h=200&fit=crop" alt="iPhone 13 Pro">
+        <div class="related-info">
+          <div class="related-title">iPhone 13 Pro 128GB ゴールド</div>
+          <div class="related-price">¥ 115,000</div>
+        </div>
+      </div>
+      <div class="related-item" onclick="viewProduct(2)">
+        <img src="https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=200&h=200&fit=crop" alt="iPhone 14">
+        <div class="related-info">
+          <div class="related-title">iPhone 14 128GB ブルー 美品</div>
+          <div class="related-price">¥ 95,000</div>
+        </div>
+      </div>
+      <div class="related-item" onclick="viewProduct(3)">
+        <img src="https://images.unsplash.com/photo-1580910051074-3eb694886505?w=200&h=200&fit=crop" alt="iPhone 14 Plus">
+        <div class="related-info">
+          <div class="related-title">iPhone 14 Plus 256GB パープル</div>
+          <div class="related-price">¥ 125,000</div>
+        </div>
+      </div>
+      <div class="related-item" onclick="viewProduct(4)">
+        <img src="https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=200&h=200&fit=crop" alt="iPhone 15">
+        <div class="related-info">
+          <div class="related-title">iPhone 15 128GB ピンク 新品未開封</div>
+          <div class="related-price">¥ 135,000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 安心・安全への取り組み -->
+  <div class="safety-notice">
+    <div class="safety-title">安心・安全への取り組み</div>
+    <div class="safety-text">
+      お金は事務局に支払われ、評価後に振り込まれます。出品者、購入者ともに安心してお取引いただけます。
+    </div>
+  </div>
+</div>
+
+<%= content_for :javascript do %>
+  <script>
+    // 画像切り替え機能
+    function changeImage(thumbnail, imageUrl) {
+      // メイン画像を変更
+      document.getElementById('mainImage').src = imageUrl;
+      
+      // アクティブなサムネイルを更新
+      document.querySelectorAll('.thumbnail').forEach(thumb => {
+        thumb.classList.remove('active');
+      });
+      thumbnail.classList.add('active');
+    }
+
+    // いいね機能
+    function toggleLike() {
+      const likeBtn = document.getElementById('likeBtn');
+      const likeIcon = document.getElementById('likeIcon');
+      const likeText = document.getElementById('likeText');
+      const likeCount = document.getElementById('likeCount');
+      
+      if (likeBtn.classList.contains('liked')) {
+        // いいね解除
+        likeBtn.classList.remove('liked');
+        likeIcon.textContent = '♡';
+        likeText.textContent = 'いいね';
+        likeCount.textContent = parseInt(likeCount.textContent) - 1;
+      } else {
+        // いいね追加
+        likeBtn.classList.add('liked');
+        likeIcon.textContent = '♥';
+        likeText.textContent = 'いいね済み';
+        likeCount.textContent = parseInt(likeCount.textContent) + 1;
+      }
+    }
+
+    // 購入手続き
+    function buyNow() {
+      alert('購入手続きページに移動します');
+    }
+
+    // カートに追加
+    function addToCart() {
+      alert('カートに追加しました');
+    }
+
+    // 関連商品表示
+    function viewProduct(id) {
+      alert(`商品${id}の詳細ページに移動します`);
+    }
+
+    // ページ読み込み時の初期化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 画像のホバーエフェクト
+      const mainImage = document.getElementById('mainImage');
+      mainImage.addEventListener('click', function() {
+        // 画像拡大表示の実装
+        alert('画像拡大表示（実装可能）');
+      });
+    });
+  </script>
+<% end %>
