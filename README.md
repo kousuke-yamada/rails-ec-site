@@ -67,3 +67,15 @@ docker-compose run --rm app bin/*****
 ↑このDockerコマンドをrails系コマンドの「前」に加えて実行して下さい。↑
 
 ```
+# 構文チェックコマンド
+```
+# rubocop実行（全実行）全ての.rbファイルが対象
+docker-compose run --rm app bundle exec rubocop
+# rubocop実行（個別実行）例：app/models/user.rbのみチェックしたい場合
+docker-compose run --rm app bundle exec rubocop app/models/user.rb
+
+# rubocop（自動整形）
+docker-compose run --rm app bundle exec rubocop -a
+
+```
+
