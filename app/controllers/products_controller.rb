@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy, :purchase]
+  before_action :set_product, only: [ :show, :edit, :update, :destroy, :purchase ]
 
   def index
     @products = Product.all
@@ -19,9 +19,9 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
-    
+
     if @product.save
-      redirect_to @product, notice: 'Product was successfully created.'
+      redirect_to @product, notice: "Product was successfully created."
     else
       render :new
     end
@@ -35,7 +35,7 @@ class ProductsController < ApplicationController
 
   def update
     if @product.update(product_params)
-      redirect_to @product, notice: 'Product was successfully updated.'
+      redirect_to @product, notice: "Product was successfully updated."
     else
       render :edit
     end
@@ -43,7 +43,7 @@ class ProductsController < ApplicationController
 
   def destroy
     @product.destroy
-    redirect_to products_path, notice: 'Product was successfully deleted.'
+    redirect_to products_path, notice: "Product was successfully deleted."
   end
 
   private

@@ -49,9 +49,9 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create product" do
-    assert_difference('Product.count') do
-      post products_path, params: { 
-        product: { 
+    assert_difference("Product.count") do
+      post products_path, params: {
+        product: {
           name: "New Product",
           price: 1500,
           condition_id: 1,
@@ -60,7 +60,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
           shipping_day_id: 1,
           category_id: 1,
           user_id: users(:one).id
-        } 
+        }
       }
     end
     assert_redirected_to product_path(Product.last)
@@ -77,11 +77,11 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
       category_id: 1,
       user_id: users(:one).id
     )
-    patch product_path(product), params: { 
-      product: { 
+    patch product_path(product), params: {
+      product: {
         name: "Updated Product",
         price: 2000
-      } 
+      }
     }
     assert_redirected_to product_path(product)
   end
@@ -97,7 +97,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
       category_id: 1,
       user_id: users(:one).id
     )
-    assert_difference('Product.count', -1) do
+    assert_difference("Product.count", -1) do
       delete product_path(product)
     end
     assert_redirected_to products_path
