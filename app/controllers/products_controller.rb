@@ -6,6 +6,10 @@ class ProductsController < ApplicationController
   end
 
   def listing
+    @product = Product.new
+  end
+
+  def my_products
     @products = Product.all
   end
 
@@ -19,11 +23,12 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
+    @product.user_id = User.first.id
 
     if @product.save
-      redirect_to @product, notice: "Product was successfully created."
+      redirect_to my_products_products_path, notice: "商品が正常に出品されました。"
     else
-      render :new
+      render :listing
     end
   end
 
@@ -53,6 +58,9 @@ class ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :price, :condition_id, :shipping_fee_payer_id, :prefecture_id, :shipping_day_id, :category_id, :user_id)
+    params.require(:product).permit(:name, :description, :price, :condition_id, 
+                                     :shipping_fee_payer_id, :prefecture_id, 
+                                     :shipping_day_id, :category_id, :user_id,
+                                     images: [])
   end
 end

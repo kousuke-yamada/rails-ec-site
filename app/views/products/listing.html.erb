@@ -272,6 +272,21 @@
       line-height: 1.4;
     }
     
+    .alert {
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
     @media (max-width: 768px) {
       .container {
         padding: 16px 8px;
@@ -304,7 +319,19 @@
 </header>
 
 <div class="container">
-  <%= form_with url: "/products", method: :post, local: true, id: "listingForm", multipart: true do |form| %>
+  <!-- エラーメッセージ表示 -->
+  <% if @product && @product.errors.any? %>
+    <div class="alert">
+      <h4><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h4>
+      <ul>
+        <% @product.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @product, local: true, multipart: true, id: "listingForm", data: { turbo: false } do |form| %>
     <!-- 商品画像 -->
     <div class="form-section">
       <h2 class="section-title">商品の写真</h2>
@@ -313,13 +340,15 @@
           商品画像
           <span class="required">必須</span>
         <% end %>
-        <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
+        <div class="photo-upload">
           <div class="photo-upload-icon">📷</div>
-          <div class="photo-upload-text">ここをクリックして写真を追加</div>
+          <div class="photo-upload-text">写真を選択</div>
           <div class="photo-upload-note">最大10枚まで（JPEG、PNG形式）</div>
+          <%= form.file_field :images, multiple: true, accept: "image/*", class: "form-input", style: "margin-top: 16px;" %>
         </div>
-        <%= form.file_field :images, multiple: true, accept: "image/*", style: "display: none;", id: "photoInput" %>
-        <div class="photo-preview" id="photoPreview"></div>
+        <div class="photo-preview" id="photoPreview">
+          <!-- 選択した画像のプレビューがここに表示されます -->
+        </div>
       </div>
     </div>
 
@@ -327,35 +356,35 @@
     <div class="form-section">
       <h2 class="section-title">商品の詳細</h2>
       <div class="form-group">
-        <%= form.label :category, class: "form-label" do %>
+        <%= form.label :category_id, class: "form-label" do %>
           カテゴリー
           <span class="required">必須</span>
         <% end %>
-        <%= form.select :category, options_for_select([
+        <%= form.select :category_id, options_for_select([
           ["選択してください", ""],
-          ["ファッション", "fashion"],
-          ["家電・スマホ・カメラ", "electronics"],
-          ["本・音楽・ゲーム", "books"],
-          ["スポーツ・レジャー", "sports"],
-          ["コスメ・香水・美容", "beauty"],
-          ["インテリア・住まい・小物", "home"],
-          ["おもちゃ・ホビー・グッズ", "toys"]
+          ["ファッション", 1],
+          ["家電・スマホ・カメラ", 2],
+          ["本・音楽・ゲーム", 3],
+          ["スポーツ・レジャー", 4],
+          ["コスメ・香水・美容", 5],
+          ["インテリア・住まい・小物", 6],
+          ["おもちゃ・ホビー・グッズ", 7]
         ]), {}, { class: "form-select", required: true } %>
       </div>
       
       <div class="form-group">
-        <%= form.label :condition, class: "form-label" do %>
+        <%= form.label :condition_id, class: "form-label" do %>
           商品の状態
           <span class="required">必須</span>
         <% end %>
-        <%= form.select :condition, options_for_select([
+        <%= form.select :condition_id, options_for_select([
           ["選択してください", ""],
-          ["新品、未使用", "new"],
-          ["未使用に近い", "near-new"],
-          ["目立った傷や汚れなし", "good"],
-          ["やや傷や汚れあり", "fair"],
-          ["傷や汚れあり", "poor"],
-          ["全体的に状態が悪い", "bad"]
+          ["新品、未使用", 1],
+          ["未使用に近い", 2],
+          ["目立った傷や汚れなし", 3],
+          ["やや傷や汚れあり", 4],
+          ["傷や汚れあり", 5],
+          ["全体的に状態が悪い", 6]
         ]), {}, { class: "form-select", required: true } %>
       </div>
     </div>
@@ -384,27 +413,47 @@
     <div class="form-section">
       <h2 class="section-title">配送について</h2>
       <div class="form-group">
-        <%= form.label :shipping_fee_payer, class: "form-label" do %>
+        <%= form.label :shipping_fee_payer_id, class: "form-label" do %>
           配送料の負担
           <span class="required">必須</span>
         <% end %>
-        <%= form.select :shipping_fee_payer, options_for_select([
+        <%= form.select :shipping_fee_payer_id, options_for_select([
           ["選択してください", ""],
-          ["送料込み（出品者負担）", "seller"],
-          ["着払い（購入者負担）", "buyer"]
+          ["送料込み（出品者負担）", 1],
+          ["着払い（購入者負担）", 2]
         ]), {}, { class: "form-select", required: true } %>
       </div>
       
       <div class="form-group">
-        <%= form.label :preparation_day, class: "form-label" do %>
+        <%= form.label :prefecture_id, class: "form-label" do %>
+          発送元の地域
+          <span class="required">必須</span>
+        <% end %>
+        <%= form.select :prefecture_id, options_for_select([
+          ["選択してください", ""],
+          ["北海道", 1], ["青森県", 2], ["岩手県", 3], ["宮城県", 4], ["秋田県", 5],
+          ["山形県", 6], ["福島県", 7], ["茨城県", 8], ["栃木県", 9], ["群馬県", 10],
+          ["埼玉県", 11], ["千葉県", 12], ["東京都", 13], ["神奈川県", 14], ["新潟県", 15],
+          ["富山県", 16], ["石川県", 17], ["福井県", 18], ["山梨県", 19], ["長野県", 20],
+          ["岐阜県", 21], ["静岡県", 22], ["愛知県", 23], ["三重県", 24], ["滋賀県", 25],
+          ["京都府", 26], ["大阪府", 27], ["兵庫県", 28], ["奈良県", 29], ["和歌山県", 30],
+          ["鳥取県", 31], ["島根県", 32], ["岡山県", 33], ["広島県", 34], ["山口県", 35],
+          ["徳島県", 36], ["香川県", 37], ["愛媛県", 38], ["高知県", 39], ["福岡県", 40],
+          ["佐賀県", 41], ["長崎県", 42], ["熊本県", 43], ["大分県", 44], ["宮崎県", 45],
+          ["鹿児島県", 46], ["沖縄県", 47]
+        ]), {}, { class: "form-select", required: true } %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.label :shipping_day_id, class: "form-label" do %>
           発送までの日数
           <span class="required">必須</span>
         <% end %>
-        <%= form.select :preparation_day, options_for_select([
+        <%= form.select :shipping_day_id, options_for_select([
           ["選択してください", ""],
-          ["1〜2日で発送", "1-2"],
-          ["2〜3日で発送", "2-3"],
-          ["4〜7日で発送", "4-7"]
+          ["1〜2日で発送", 1],
+          ["2〜3日で発送", 2],
+          ["4〜7日で発送", 3]
         ]), {}, { class: "form-select", required: true } %>
       </div>
     </div>
@@ -449,69 +498,41 @@
 
 <%= content_for :javascript do %>
   <script>
-    // 写真アップロード機能
-    const photoInput = document.getElementById('photoInput');
-    const photoPreview = document.getElementById('photoPreview');
-    let uploadedPhotos = [];
+    document.addEventListener('DOMContentLoaded', function() {
+      // 価格計算機能
+      const priceInput = document.getElementById('price');
+      const feeElement = document.getElementById('fee');
+      const profitElement = document.getElementById('profit');
 
-    photoInput.addEventListener('change', function(e) {
-      const files = Array.from(e.target.files);
-      
-      files.forEach(file => {
-        if (uploadedPhotos.length >= 10) {
-          alert('写真は最大10枚まで追加できます');
-          return;
-        }
-        
-        if (file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            uploadedPhotos.push({
-              file: file,
-              url: e.target.result
-            });
-            updatePhotoPreview();
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-    });
+      if (priceInput && feeElement && profitElement) {
+        priceInput.addEventListener('input', function() {
+          const price = parseInt(this.value) || 0;
+          const fee = Math.floor(price * 0.1);
+          const profit = price - fee;
 
-    function updatePhotoPreview() {
-      photoPreview.innerHTML = '';
-      uploadedPhotos.forEach((photo, index) => {
-        const photoItem = document.createElement('div');
-        photoItem.className = 'photo-item';
-        photoItem.innerHTML = `
-          <img src="${photo.url}" alt="商品写真${index + 1}">
-          <button class="photo-remove" onclick="removePhoto(${index})">×</button>
-        `;
-        photoPreview.appendChild(photoItem);
-      });
-    }
+          feeElement.textContent = `¥ ${fee.toLocaleString()}`;
+          profitElement.textContent = `¥ ${profit.toLocaleString()}`;
+        });
+      }
 
-    function removePhoto(index) {
-      uploadedPhotos.splice(index, 1);
-      updatePhotoPreview();
-    }
+      // 下書き保存
+      const draftBtn = document.querySelector('.draft-btn');
+      if (draftBtn) {
+        draftBtn.addEventListener('click', function() {
+          alert('下書きが保存されました');
+        });
+      }
 
-    // 価格計算機能
-    const priceInput = document.getElementById('price');
-    const feeElement = document.getElementById('fee');
-    const profitElement = document.getElementById('profit');
-
-    priceInput.addEventListener('input', function() {
-      const price = parseInt(this.value) || 0;
-      const fee = Math.floor(price * 0.1);
-      const profit = price - fee;
-
-      feeElement.textContent = `¥ ${fee.toLocaleString()}`;
-      profitElement.textContent = `¥ ${profit.toLocaleString()}`;
-    });
-
-    // 下書き保存
-    document.querySelector('.draft-btn').addEventListener('click', function() {
-      alert('下書きが保存されました');
+      // 画像プレビュー機能（シンプル版）
+      const imageInput = document.querySelector('input[type="file"][name="product[images][]"]');
+      if (imageInput) {
+        imageInput.addEventListener('change', function() {
+          const previewArea = document.getElementById('photoPreview');
+          if (previewArea && this.files.length > 0) {
+            previewArea.innerHTML = `<p style="color: #666; margin-top: 10px;">${this.files.length}個のファイルが選択されました</p>`;
+          }
+        });
+      }
     });
   </script>
 <% end %>
