@@ -22,13 +22,14 @@ class ProductsController < ApplicationController
   end
 
   def create
-    @product = Product.new(product_params)
-    @product.user_id = User.first.id
-
-    if @product.save
-      redirect_to my_products_products_path, notice: "商品が正常に出品されました。"
+  @product = Product.new(product_params)
+  
+  if @product.save
+      redirect_to @product, notice: 'Product was successfully created.'
+      # または
+      # redirect_to product_path(@product), notice: 'Product was successfully created.'
     else
-      render :listing
+      render :new
     end
   end
 
