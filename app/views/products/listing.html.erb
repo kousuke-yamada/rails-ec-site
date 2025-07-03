@@ -1,0 +1,538 @@
+<% content_for :title, "商品を出品する" %>
+
+<%= content_for :head do %>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8f8f8;
+      line-height: 1.6;
+    }
+    
+    .header {
+      background: white;
+      padding: 16px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ea352d;
+    }
+    
+    .breadcrumb {
+      color: #888;
+      font-size: 14px;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    
+    .form-section {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    
+    .required {
+      color: #ea352d;
+      font-size: 12px;
+      background: #ea352d;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 8px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #ea352d;
+      box-shadow: 0 0 0 2px rgba(234, 53, 45, 0.1);
+    }
+    
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    
+    .form-select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      background: white;
+    }
+    
+    .photo-upload {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fafafa;
+    }
+    
+    .photo-upload:hover {
+      border-color: #ea352d;
+      background: #fff5f5;
+    }
+    
+    .photo-upload-icon {
+      font-size: 48px;
+      color: #ccc;
+      margin-bottom: 16px;
+    }
+    
+    .photo-upload-text {
+      color: #666;
+      margin-bottom: 8px;
+    }
+    
+    .photo-upload-note {
+      font-size: 12px;
+      color: #888;
+    }
+    
+    .photo-preview {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    
+    .photo-item {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .photo-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .price-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .price-symbol {
+      position: absolute;
+      left: 12px;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .price-input {
+      padding-left: 32px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    
+    .fee-info {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 6px;
+      margin-top: 12px;
+    }
+    
+    .fee-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .fee-row.total {
+      font-weight: 600;
+      font-size: 16px;
+      border-top: 1px solid #ddd;
+      padding-top: 8px;
+      margin-top: 12px;
+    }
+    
+    .submit-section {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .submit-btn {
+      background: #ea352d;
+      color: white;
+      border: none;
+      padding: 16px 48px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      min-width: 200px;
+    }
+    
+    .submit-btn:hover {
+      background: #d32f2f;
+    }
+    
+    .submit-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .draft-btn {
+      background: transparent;
+      color: #666;
+      border: 1px solid #ddd;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-right: 16px;
+    }
+    
+    .note {
+      font-size: 12px;
+      color: #888;
+      margin-top: 16px;
+      line-height: 1.4;
+    }
+    
+    .alert {
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px 8px;
+      }
+      
+      .form-section {
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+      
+      .photo-upload {
+        padding: 24px 16px;
+      }
+      
+      .submit-btn {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+  </style>
+<% end %>
+
+<header class="header">
+  <div class="header-content">
+    <div class="logo">メルカリ</div>
+    <div class="breadcrumb">
+      ホーム > 出品
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- エラーメッセージ表示 -->
+  <% if @product && @product.errors.any? %>
+    <div class="alert">
+      <h4><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h4>
+      <ul>
+        <% @product.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @product, local: true, multipart: true, id: "listingForm", data: { turbo: false } do |form| %>
+    <!-- 商品画像 -->
+    <div class="form-section">
+      <h2 class="section-title">商品の写真</h2>
+      <div class="form-group">
+        <%= form.label :images, class: "form-label" do %>
+          商品画像
+          <span class="required">必須</span>
+        <% end %>
+        <div class="photo-upload">
+          <div class="photo-upload-icon">📷</div>
+          <div class="photo-upload-text">写真を選択</div>
+          <div class="photo-upload-note">最大10枚まで（JPEG、PNG形式）</div>
+          <%= form.file_field :images, multiple: true, accept: "image/*", class: "form-input", style: "margin-top: 16px;" %>
+        </div>
+        <div class="photo-preview" id="photoPreview">
+          <!-- 選択した画像のプレビューがここに表示されます -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 商品の詳細 -->
+    <div class="form-section">
+      <h2 class="section-title">商品の詳細</h2>
+      <div class="form-group">
+        <%= form.label :category_id, class: "form-label" do %>
+          カテゴリー
+          <span class="required">必須</span>
+        <% end %>
+        <%= form.select :category_id, options_for_select([
+          ["選択してください", ""],
+          ["ファッション", 1],
+          ["家電・スマホ・カメラ", 2],
+          ["本・音楽・ゲーム", 3],
+          ["スポーツ・レジャー", 4],
+          ["コスメ・香水・美容", 5],
+          ["インテリア・住まい・小物", 6],
+          ["おもちゃ・ホビー・グッズ", 7]
+        ]), {}, { class: "form-select", required: true } %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.label :condition_id, class: "form-label" do %>
+          商品の状態
+          <span class="required">必須</span>
+        <% end %>
+        <%= form.select :condition_id, options_for_select([
+          ["選択してください", ""],
+          ["新品、未使用", 1],
+          ["未使用に近い", 2],
+          ["目立った傷や汚れなし", 3],
+          ["やや傷や汚れあり", 4],
+          ["傷や汚れあり", 5],
+          ["全体的に状態が悪い", 6]
+        ]), {}, { class: "form-select", required: true } %>
+      </div>
+    </div>
+
+    <!-- 商品名と説明 -->
+    <div class="form-section">
+      <h2 class="section-title">商品名と説明</h2>
+      <div class="form-group">
+        <%= form.label :name, class: "form-label" do %>
+          商品名
+          <span class="required">必須</span>
+        <% end %>
+        <%= form.text_field :name, class: "form-input", placeholder: "商品名（必須 40文字まで）", maxlength: 40, required: true %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.label :description, class: "form-label" do %>
+          商品の説明
+          <span class="required">必須</span>
+        <% end %>
+        <%= form.text_area :description, class: "form-input form-textarea", placeholder: "商品の説明（色、素材、重さ、定価、注意点など）\n\n例）2020年頃に購入した〇〇です。\n数回使用したのみで、目立った傷や汚れはありません。", maxlength: 1000, required: true %>
+      </div>
+    </div>
+
+    <!-- 配送について -->
+    <div class="form-section">
+      <h2 class="section-title">配送について</h2>
+      <div class="form-group">
+        <%= form.label :shipping_fee_payer_id, class: "form-label" do %>
+          配送料の負担
+          <span class="required">必須</span>
+        <% end %>
+        <%= form.select :shipping_fee_payer_id, options_for_select([
+          ["選択してください", ""],
+          ["送料込み（出品者負担）", 1],
+          ["着払い（購入者負担）", 2]
+        ]), {}, { class: "form-select", required: true } %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.label :prefecture_id, class: "form-label" do %>
+          発送元の地域
+          <span class="required">必須</span>
+        <% end %>
+        <%= form.select :prefecture_id, options_for_select([
+          ["選択してください", ""],
+          ["北海道", 1], ["青森県", 2], ["岩手県", 3], ["宮城県", 4], ["秋田県", 5],
+          ["山形県", 6], ["福島県", 7], ["茨城県", 8], ["栃木県", 9], ["群馬県", 10],
+          ["埼玉県", 11], ["千葉県", 12], ["東京都", 13], ["神奈川県", 14], ["新潟県", 15],
+          ["富山県", 16], ["石川県", 17], ["福井県", 18], ["山梨県", 19], ["長野県", 20],
+          ["岐阜県", 21], ["静岡県", 22], ["愛知県", 23], ["三重県", 24], ["滋賀県", 25],
+          ["京都府", 26], ["大阪府", 27], ["兵庫県", 28], ["奈良県", 29], ["和歌山県", 30],
+          ["鳥取県", 31], ["島根県", 32], ["岡山県", 33], ["広島県", 34], ["山口県", 35],
+          ["徳島県", 36], ["香川県", 37], ["愛媛県", 38], ["高知県", 39], ["福岡県", 40],
+          ["佐賀県", 41], ["長崎県", 42], ["熊本県", 43], ["大分県", 44], ["宮崎県", 45],
+          ["鹿児島県", 46], ["沖縄県", 47]
+        ]), {}, { class: "form-select", required: true } %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.label :shipping_day_id, class: "form-label" do %>
+          発送までの日数
+          <span class="required">必須</span>
+        <% end %>
+        <%= form.select :shipping_day_id, options_for_select([
+          ["選択してください", ""],
+          ["1〜2日で発送", 1],
+          ["2〜3日で発送", 2],
+          ["4〜7日で発送", 3]
+        ]), {}, { class: "form-select", required: true } %>
+      </div>
+    </div>
+
+    <!-- 販売価格 -->
+    <div class="form-section">
+      <h2 class="section-title">販売価格</h2>
+      <div class="form-group">
+        <%= form.label :price, class: "form-label" do %>
+          価格
+          <span class="required">必須</span>
+        <% end %>
+        <div class="price-input-wrapper">
+          <span class="price-symbol">¥</span>
+          <%= form.number_field :price, class: "form-input price-input", placeholder: "300", min: 300, max: 9999999, required: true, id: "price" %>
+        </div>
+        
+        <div class="fee-info">
+          <div class="fee-row">
+            <span>販売手数料 (10%)</span>
+            <span id="fee">¥ -</span>
+          </div>
+          <div class="fee-row total">
+            <span>販売利益</span>
+            <span id="profit">¥ -</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 出品ボタン -->
+    <div class="submit-section">
+      <button type="button" class="draft-btn">下書きに保存</button>
+      <%= form.submit "出品する", class: "submit-btn" %>
+      <div class="note">
+        禁止されている出品物を投稿した場合、事務局にて削除される可能性があります。<br>
+        また、虚偽の情報や他者の権利を侵害する投稿は禁止されています。
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%= content_for :javascript do %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 価格計算機能
+      const priceInput = document.getElementById('price');
+      const feeElement = document.getElementById('fee');
+      const profitElement = document.getElementById('profit');
+
+      if (priceInput && feeElement && profitElement) {
+        priceInput.addEventListener('input', function() {
+          const price = parseInt(this.value) || 0;
+          const fee = Math.floor(price * 0.1);
+          const profit = price - fee;
+
+          feeElement.textContent = `¥ ${fee.toLocaleString()}`;
+          profitElement.textContent = `¥ ${profit.toLocaleString()}`;
+        });
+      }
+
+      // 下書き保存
+      const draftBtn = document.querySelector('.draft-btn');
+      if (draftBtn) {
+        draftBtn.addEventListener('click', function() {
+          alert('下書きが保存されました');
+        });
+      }
+
+      // 画像プレビュー機能（シンプル版）
+      const imageInput = document.querySelector('input[type="file"][name="product[images][]"]');
+      if (imageInput) {
+        imageInput.addEventListener('change', function() {
+          const previewArea = document.getElementById('photoPreview');
+          if (previewArea && this.files.length > 0) {
+            previewArea.innerHTML = `<p style="color: #666; margin-top: 10px;">${this.files.length}個のファイルが選択されました</p>`;
+          }
+        });
+      }
+    });
+  </script>
+<% end %>
