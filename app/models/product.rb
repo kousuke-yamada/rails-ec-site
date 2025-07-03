@@ -2,7 +2,7 @@ class Product < ApplicationRecord
   belongs_to :user
   has_many :orders, dependent: :destroy
   has_many_attached :images  # この行を追加
-  
+
   validates :name, presence: true
   validates :price, presence: true, numericality: { greater_than: 0 }
   validates :condition_id, presence: true
