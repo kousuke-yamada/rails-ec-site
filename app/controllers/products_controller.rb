@@ -23,14 +23,14 @@ class ProductsController < ApplicationController
 
   def create
   @product = Product.new(product_params)
-  
+
   if @product.save
-      redirect_to @product, notice: 'Product was successfully created.'
-      # または
-      # redirect_to product_path(@product), notice: 'Product was successfully created.'
-    else
+      redirect_to @product, notice: "Product was successfully created."
+  # または
+  # redirect_to product_path(@product), notice: 'Product was successfully created.'
+  else
       render :new
-    end
+  end
   end
 
   def show
