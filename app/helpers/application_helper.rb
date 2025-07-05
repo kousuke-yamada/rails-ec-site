@@ -2,7 +2,7 @@ module ApplicationHelper
   def get_condition_name(condition_id)
     conditions = {
       1 => "新品、未使用",
-      2 => "未使用に近い", 
+      2 => "未使用に近い",
       3 => "目立った傷や汚れなし",
       4 => "やや傷や汚れあり",
       5 => "傷や汚れあり",
@@ -15,7 +15,7 @@ module ApplicationHelper
     categories = {
       1 => "ファッション",
       2 => "家電・スマホ・カメラ",
-      3 => "本・音楽・ゲーム", 
+      3 => "本・音楽・ゲーム",
       4 => "スポーツ・レジャー",
       5 => "コスメ・香水・美容",
       6 => "インテリア・住まい・小物",
