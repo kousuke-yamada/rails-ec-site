@@ -2,7 +2,7 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy, :purchase ]
 
   def index
-    @products = Product.all
+    @products = Product.all.order(created_at: :desc)
   end
 
   def listing
@@ -10,11 +10,13 @@ class ProductsController < ApplicationController
   end
 
   def my_products
-    @products = Product.all
+    # 実際のアプリでは current_user.products を使用
+    @products = Product.all.order(created_at: :desc)
+    # @products = current_user.products.order(created_at: :desc) if user_signed_in?
   end
 
   def purchase
-    # @product = Product.find(params[:id]) # 実際のデータを使う場合
+    # @product = Product.find(params[:id])
   end
 
   def new
@@ -22,18 +24,21 @@ class ProductsController < ApplicationController
   end
 
   def create
-  @product = Product.new(product_params)
+    @product = Product.new(product_params)
 
-  if @product.save
-      redirect_to @product, notice: "Product was successfully created."
-  # または
-  # redirect_to product_path(@product), notice: 'Product was successfully created.'
-  else
-      render :new
-  end
+    if @product.save
+      redirect_to @product, notice: "商品が正常に出品されました。"
+    else
+      render :listing, status: :unprocessable_entity
+    end
   end
 
   def show
+    # 関連商品を取得（同じカテゴリーの他の商品）
+    @related_products = Product.where(category_id: @product.category_id)
+                              .where.not(id: @product.id)
+                              .limit(4)
+                              .order(created_at: :desc)
   end
 
   def edit
@@ -41,15 +46,15 @@ class ProductsController < ApplicationController
 
   def update
     if @product.update(product_params)
-      redirect_to @product, notice: "Product was successfully updated."
+      redirect_to @product, notice: "商品情報が更新されました。"
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @product.destroy
-    redirect_to products_path, notice: "Product was successfully deleted."
+    redirect_to my_products_products_path, notice: "商品を削除しました。"
   end
 
   private

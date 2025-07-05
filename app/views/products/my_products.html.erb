@@ -1,306 +1,128 @@
 <% content_for :title, "出品した商品" %>
 
 <%= content_for :head do %>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #f8f8f8;
-      line-height: 1.6;
+      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
     }
-    
-    .header {
-      background: white;
-      padding: 16px 0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ea352d;
-    }
-    
-    .header-nav {
-      display: flex;
-      gap: 16px;
-    }
-    
-    .nav-link {
-      color: #333;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
-    
-    .nav-link:hover {
-      background-color: #f0f0f0;
-    }
-    
-    .nav-link.primary {
-      background-color: #ea352d;
-      color: white;
-    }
-    
-    .nav-link.primary:hover {
-      background-color: #d32f2f;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 16px;
-    }
-    
-    .page-header {
-      background: white;
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .page-title {
-      font-size: 24px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 8px;
-    }
-    
-    .page-subtitle {
-      color: #666;
-      font-size: 14px;
-    }
-    
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-    }
-    
-    .product-card {
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-      cursor: pointer;
-    }
-    
-    .product-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    
-    .product-image {
-      width: 100%;
-      height: 200px;
-      background: #f5f5f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-      font-size: 48px;
-      position: relative;
-    }
-    
-    .product-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .product-info {
-      padding: 16px;
-    }
-    
-    .product-name {
-      font-size: 16px;
-      font-weight: 500;
-      color: #333;
-      margin-bottom: 8px;
+    .line-clamp-2 {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-    }
-    
-    .product-price {
-      font-size: 20px;
-      font-weight: 600;
-      color: #ea352d;
-      margin-bottom: 8px;
-    }
-    
-    .product-description {
-      font-size: 14px;
-      color: #666;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
-    
-    .product-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: #888;
-    }
-    
-    .product-status {
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 500;
-    }
-    
-    .status-active {
-      background: #e8f5e8;
-      color: #2e7d32;
-    }
-    
-    .status-sold {
-      background: #ffebee;
-      color: #c62828;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .empty-icon {
-      font-size: 64px;
-      color: #ddd;
-      margin-bottom: 16px;
-    }
-    
-    .empty-title {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 8px;
-    }
-    
-    .empty-text {
-      color: #888;
-      margin-bottom: 24px;
-    }
-    
-    .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      background: #ea352d;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: 500;
-      transition: background-color 0.2s;
-    }
-    
-    .btn:hover {
-      background: #d32f2f;
-    }
-    
-    .badge {
-      background: #ea352d;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 500;
-    }
-    
-    @media (max-width: 768px) {
-      .container {
-        padding: 16px 8px;
-      }
-      
-      .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 16px;
-      }
-      
-      .header-nav {
-        display: none;
-      }
     }
   </style>
 <% end %>
 
-<header class="header">
-  <div class="header-content">
-    <div class="logo">メルカリ</div>
-    <nav class="header-nav">
-      <%= link_to "ホーム", root_path, class: "nav-link" %>
-      <%= link_to "出品した商品", my_products_products_path, class: "nav-link" %>
-      <%= link_to "商品を出品", listing_products_path, class: "nav-link primary" %>
-    </nav>
-  </div>
-</header>
+<div class="bg-gray-100 min-h-screen">
+  <!-- ヘッダー -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="text-2xl font-bold text-red-500">メルカリ</div>
+        <nav class="hidden md:flex items-center space-x-4">
+          <%= link_to "ホーム", root_path, class: "text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-colors" %>
+          <%= link_to "出品した商品", my_products_products_path, class: "text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg transition-colors" %>
+          <%= link_to "商品を出品", listing_products_path, class: "bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors" %>
+        </nav>
+      </div>
+    </div>
+  </header>
 
-<div class="container">
-  <div class="page-header">
-    <h1 class="page-title">出品した商品</h1>
-    <p class="page-subtitle">あなたが出品した商品の一覧です</p>
-  </div>
+  <div class="max-w-7xl mx-auto px-4 py-6">
+    <!-- ページヘッダー -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 mb-2">出品した商品</h1>
+      <p class="text-gray-600 text-sm">あなたが出品した商品の一覧です（<%= @products.count %>件）</p>
+    </div>
 
-  <% if @products.any? %>
-    <div class="products-grid">
-      <% @products.each do |product| %>
-        <div class="product-card" onclick="location.href='<%= product_path(product) %>'">
-          <div class="product-image">
-            <% if product.images.any? %>
-              <%= image_tag product.images.first, alt: product.name %>
-            <% else %>
-              📷
-            <% end %>
-          </div>
-          
-          <div class="product-info">
-            <h3 class="product-name"><%= product.name %></h3>
-            <div class="product-price">¥<%= product.price.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse %></div>
-            <% if product.description.present? %>
-              <p class="product-description"><%= product.description %></p>
-            <% end %>
+    <% if @products.any? %>
+      <!-- 商品グリッド -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <% @products.each do |product| %>
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer" onclick="location.href='<%= product_path(product) %>'">
+            <div class="w-full h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+              <% if product.images.any? %>
+                <%= image_tag product.images.first, alt: product.name, class: "w-full h-full object-cover" %>
+              <% else %>
+                <span class="text-5xl text-gray-400">📷</span>
+              <% end %>
+            </div>
             
-            <div class="product-meta">
-              <span class="product-date"><%= product.created_at.strftime("%m/%d") %></span>
-              <span class="product-status status-active">出品中</span>
+            <div class="p-4">
+              <h3 class="font-medium text-gray-900 mb-2 line-clamp-2">
+                <%= product.name %>
+              </h3>
+              
+              <div class="text-xl font-bold text-red-500 mb-2">
+                ¥<%= number_with_delimiter(product.price.to_i) %>
+              </div>
+              
+              <% if product.description.present? %>
+                <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                  <%= truncate(product.description, length: 60) %>
+                </p>
+              <% end %>
+              
+              <div class="flex justify-between items-center text-xs text-gray-500">
+                <span><%= product.created_at.strftime("%m/%d") %></span>
+                <% if product.respond_to?(:sold?) && product.sold? %>
+                  <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full font-medium">売却済み</span>
+                <% else %>
+                  <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">出品中</span>
+                <% end %>
+              </div>
+              
+              <!-- 商品の詳細情報 -->
+              <div class="mt-3 pt-3 border-t border-gray-100">
+                <div class="flex flex-wrap gap-2 text-xs">
+                  <% if product.condition_id.present? %>
+                    <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded">
+                      <%= get_condition_name(product.condition_id) %>
+                    </span>
+                  <% end %>
+                  
+                  <% if product.category_id.present? %>
+                    <span class="bg-purple-50 text-purple-700 px-2 py-1 rounded">
+                      <%= get_category_name(product.category_id) %>
+                    </span>
+                  <% end %>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <div class="empty-state">
-      <div class="empty-icon">📦</div>
-      <h2 class="empty-title">まだ商品を出品していません</h2>
-      <p class="empty-text">最初の商品を出品して、販売を始めましょう！</p>
-      <%= link_to "商品を出品する", listing_products_path, class: "btn" %>
-    </div>
+        <% end %>
+      </div>
+    <% else %>
+      <!-- 空の状態（商品がない場合） -->
+      <div class="bg-white rounded-xl shadow-sm p-12 text-center">
+        <div class="text-6xl mb-4 opacity-50">📦</div>
+        <h2 class="text-xl text-gray-600 mb-2">まだ商品を出品していません</h2>
+        <p class="text-gray-500 mb-6">最初の商品を出品して、販売を始めましょう！</p>
+        <%= link_to "商品を出品する", listing_products_path, class: "inline-block bg-red-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-600 transition-colors" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- フローティングアクションボタン -->
+  <%= link_to listing_products_path, class: "fixed bottom-8 right-8 w-14 h-14 bg-red-500 text-white rounded-full text-2xl flex items-center justify-center shadow-lg hover:bg-red-600 hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-50" do %>
+    +
   <% end %>
 </div>
+
+<script>
+  // レスポンシブ対応：モバイルでは2列表示
+  function updateGridLayout() {
+    const grid = document.querySelector('.grid');
+    if (grid && window.innerWidth < 640) {
+      grid.className = 'grid grid-cols-2 gap-4';
+    } else if (grid) {
+      grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
+    }
+  }
+
+  window.addEventListener('resize', updateGridLayout);
+  document.addEventListener('DOMContentLoaded', updateGridLayout);
+</script>
