@@ -6,9 +6,17 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
+    
     <%= yield :head %>
-
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+    </style>
+    
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
@@ -18,8 +26,12 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-8 px-5">
+    <% if devise_controller? %>
       <%= yield %>
-    </main>
+    <% else %>
+      <main class="container mx-auto mt-8 px-5">
+        <%= yield %>
+      </main>
+    <% end %>
   </body>
 </html>
