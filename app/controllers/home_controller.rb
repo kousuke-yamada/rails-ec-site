@@ -5,7 +5,7 @@ class HomeController < ApplicationController
 
   def top # ★ここを index から top に変更します★
     # 表示する商品数を制限（例：8件）
-    
+
 
     # または特定の条件で絞り込む場合
     # @featured_products = Product.where(featured: true).limit(8)
