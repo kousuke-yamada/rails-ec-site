@@ -40,9 +40,22 @@
                 
                 <!-- ナビゲーション -->
                 <div class="flex items-center space-x-4">
-                    <button class="text-gray-700 hover:text-black font-medium px-4 py-2 transition duration-200">
-                        ログイン
-                    </button>
+                    <% if user_signed_in? %>
+                        <!-- ログイン中の表示 -->
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-700 font-medium">
+                                こんにちは、<%= current_user.name %>さん
+                            </span>
+                            <%= link_to "ログアウト", destroy_user_session_path, 
+                             data: { "turbo-method": :delete,confirm: "ログアウトしますか？" },
+                             class: "text-gray-700 hover:text-black font-medium px-4 py-2 transition duration-200" %>
+                        </div>
+                    <% else %>
+                        <!-- 未ログイン時の表示 -->
+                        <%= link_to "ログイン", new_user_session_path,
+                            class: "text-gray-700 hover:text-black font-medium px-4 py-2 transition duration-200" %>
+                    <% end %>
+                    
                     <button class="bg-red-500 text-white font-medium py-2 px-6 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200">
                         出品
                     </button>
@@ -169,9 +182,6 @@
                 if (this.textContent.includes('詳細を見る')) {
                     e.preventDefault();
                     alert('商品詳細ページはまだ実装されていません');
-                } else if (this.textContent.includes('ログイン')) {
-                    e.preventDefault();
-                    alert('ログインページに遷移します');
                 } else if (this.textContent.includes('出品')) {
                     e.preventDefault();
                     alert('出品ページはまだ実装されていません');
