@@ -5,6 +5,7 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
+  name: “user_one”
   email: alice@example.com
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
   created_at: <%= Time.current %>
@@ -12,8 +13,10 @@ one:
 # column: value
 #
 two:
+  name: “user_two”
   email: bob@example.com
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
   created_at: <%= Time.current %>
   updated_at: <%= Time.current %>
 # column: value
+
