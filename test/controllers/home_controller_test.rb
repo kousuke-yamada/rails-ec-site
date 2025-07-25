@@ -7,7 +7,7 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     @user = users(:one) # fixtures などで定義済のユーザーを利用
     sign_in @user       #  Deviseでログイン
   end
-  
+
   test "should get top" do
     get home_top_url
     assert_response :success
