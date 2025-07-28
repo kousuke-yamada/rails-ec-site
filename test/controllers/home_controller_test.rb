@@ -9,7 +9,7 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get top" do
-    get home_top_url
+    get root_url
     assert_response :success
   end
 end

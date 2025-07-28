@@ -1,0 +1,307 @@
+<% content_for :title, "#{@product.name} - 商品詳細" %>
+
+<%= content_for :head do %>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+    body {
+      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+<% end %>
+
+<div class="bg-gray-100 text-gray-800 leading-relaxed min-h-screen">
+  <!-- ヘッダー -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex items-center gap-4">
+        <%= link_to "メルカリ", root_path, class: "text-2xl font-bold text-red-500 no-underline" %>
+        <div class="text-sm text-gray-500">
+          <%= link_to "ホーム", root_path, class: "text-gray-500 no-underline hover:underline" %> > 
+          <% if @product.category_id.present? %>
+            <span class="text-gray-500"><%= get_category_name(@product.category_id) %></span> > 
+          <% end %>
+          <%= truncate(@product.name, length: 30) %>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 py-6">
+    <!-- 商品メイン情報 -->
+    <div class="grid lg:grid-cols-2 gap-10 bg-white rounded-lg p-8 shadow-sm mb-6">
+      <!-- 商品画像 -->
+      <div class="relative">
+        <div class="w-full aspect-square rounded-lg overflow-hidden mb-4 border border-gray-200">
+          <% if @product.images.any? %>
+            <%= image_tag @product.images.first, 
+                         alt: @product.name, 
+                         id: "mainImage",
+                         class: "w-full h-full object-cover cursor-pointer" %>
+          <% else %>
+            <div id="mainImage" class="w-full h-full bg-gray-100 flex items-center justify-content-center">
+              <span class="text-6xl text-gray-400">📷</span>
+            </div>
+          <% end %>
+        </div>
+        
+        <% if @product.images.any? && @product.images.count > 1 %>
+          <div class="flex gap-2 overflow-x-auto pb-2">
+            <% @product.images.each_with_index do |image, index| %>
+              <div class="thumbnail flex-shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 <%= index == 0 ? 'border-red-500' : 'border-transparent hover:border-gray-300' %> cursor-pointer transition-colors" 
+                   onclick="changeImage(this, '<%= url_for(image) %>')">
+                <%= image_tag image, 
+                             alt: "画像#{index + 1}", 
+                             class: "w-full h-full object-cover" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- 商品情報 -->
+      <div class="flex flex-col">
+        <h1 class="text-2xl font-semibold mb-4 leading-tight"><%= @product.name %></h1>
+        
+        <div class="text-4xl font-bold text-red-500 mb-2">¥ <%= number_with_delimiter(@product.price.to_i) %></div>
+        <div class="text-sm text-gray-600 mb-6">
+          （税込）
+          <% if @product.shipping_fee_payer_id == 1 %>
+            送料込み
+          <% else %>
+            着払い
+          <% end %>
+        </div>
+
+        <!-- 出品者情報 -->
+        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg mb-6">
+          <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-xl">👤</div>
+          <div>
+            <div class="font-medium mb-1">
+              <% if @product.user.present? %>
+                <%= @product.user.name || "ユーザー#{@product.user.id}" %>
+              <% else %>
+                出品者
+              <% end %>
+            </div>
+            <div class="flex items-center gap-1 text-sm text-gray-600">
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">☆</span>
+              <span>4.2 (28件)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- アクションボタン -->
+        <div class="flex flex-col gap-3 mb-8">
+          <% if @product.respond_to?(:sold?) && @product.sold? %>
+            <button class="bg-gray-400 text-white py-4 px-6 rounded-lg text-lg font-semibold cursor-not-allowed" disabled>
+              売り切れました
+            </button>
+          <% else %>
+            <%= link_to purchase_product_path(@product), 
+                       class: "bg-red-500 text-white py-4 px-6 rounded-lg text-lg font-semibold hover:bg-red-600 transition-colors text-center no-underline" do %>
+              購入手続きへ
+            <% end %>
+            <button class="bg-gray-600 text-white py-4 px-6 rounded-lg text-lg font-semibold hover:bg-gray-700 transition-colors" onclick="addToCart()">
+              カートに入れる
+            </button>
+          <% end %>
+          
+          <button class="flex items-center justify-center gap-2 bg-transparent text-gray-600 border border-gray-300 py-3 px-6 rounded-lg text-sm hover:bg-gray-50 transition-all" 
+                  id="likeBtn" onclick="toggleLike()">
+            <span id="likeIcon">♡</span>
+            <span id="likeText">いいね</span>
+            <span id="likeCount">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 商品詳細情報 -->
+    <div class="bg-white rounded-lg p-8 shadow-sm mb-6">
+      <h2 class="text-xl font-semibold mb-4 pb-2 border-b border-gray-100">商品の情報</h2>
+      
+      <table class="w-full border-collapse mb-8">
+        <% if @product.category_id.present? %>
+          <tr class="border-b border-gray-100">
+            <th class="bg-gray-50 text-left p-3 font-medium w-1/3">カテゴリー</th>
+            <td class="p-3"><%= get_category_name(@product.category_id) %></td>
+          </tr>
+        <% end %>
+        
+        <tr class="border-b border-gray-100">
+          <th class="bg-gray-50 text-left p-3 font-medium">ブランド</th>
+          <td class="p-3">-</td>
+        </tr>
+        
+        <% if @product.condition_id.present? %>
+          <tr class="border-b border-gray-100">
+            <th class="bg-gray-50 text-left p-3 font-medium">商品の状態</th>
+            <td class="p-3"><%= get_condition_name(@product.condition_id) %></td>
+          </tr>
+        <% end %>
+        
+        <% if @product.shipping_fee_payer_id.present? %>
+          <tr class="border-b border-gray-100">
+            <th class="bg-gray-50 text-left p-3 font-medium">配送料の負担</th>
+            <td class="p-3">
+              <% if @product.shipping_fee_payer_id == 1 %>
+                送料込み（出品者負担）
+              <% else %>
+                着払い（購入者負担）
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        
+        <tr class="border-b border-gray-100">
+          <th class="bg-gray-50 text-left p-3 font-medium">配送の方法</th>
+          <td class="p-3">らくらくメルカリ便</td>
+        </tr>
+        
+        <% if @product.prefecture_id.present? %>
+          <tr class="border-b border-gray-100">
+            <th class="bg-gray-50 text-left p-3 font-medium">発送元の地域</th>
+            <td class="p-3"><%= get_prefecture_name(@product.prefecture_id) %></td>
+          </tr>
+        <% end %>
+        
+        <% if @product.shipping_day_id.present? %>
+          <tr class="border-b border-gray-100">
+            <th class="bg-gray-50 text-left p-3 font-medium">発送までの日数</th>
+            <td class="p-3">
+              <% case @product.shipping_day_id %>
+              <% when 1 %>
+                1〜2日で発送
+              <% when 2 %>
+                2〜3日で発送
+              <% when 3 %>
+                4〜7日で発送
+              <% else %>
+                未設定
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        
+        <tr class="border-b border-gray-100">
+          <th class="bg-gray-50 text-left p-3 font-medium">出品日時</th>
+          <td class="p-3"><%= @product.created_at.strftime("%Y年%m月%d日 %H:%M") %></td>
+        </tr>
+      </table>
+
+      <h3 class="text-xl font-semibold mb-4 pb-2 border-b border-gray-100">商品の説明</h3>
+      <div class="leading-7 text-gray-700 whitespace-pre-line">
+        <% if @product.description.present? %>
+          <%= simple_format(@product.description) %>
+        <% else %>
+          商品の説明は登録されていません。
+        <% end %>
+      </div>
+    </div>
+
+    <!-- 関連商品 -->
+    <% if @related_products&.any? %>
+      <div class="bg-white rounded-lg p-8 shadow-sm">
+        <h2 class="text-xl font-semibold mb-4 pb-2 border-b border-gray-100">関連する商品</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+          <% @related_products.each do |product| %>
+            <%= link_to product_path(product), class: "border border-gray-200 rounded-lg overflow-hidden hover:transform hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer no-underline" do %>
+              <div class="w-full aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
+                <% if product.images.any? %>
+                  <%= image_tag product.images.first, 
+                               alt: product.name, 
+                               class: "w-full h-full object-cover" %>
+                <% else %>
+                  <span class="text-4xl text-gray-400">📷</span>
+                <% end %>
+              </div>
+              <div class="p-3">
+                <div class="text-sm mb-2 line-clamp-2 text-gray-800"><%= truncate(product.name, length: 30) %></div>
+                <div class="text-lg font-semibold text-red-500">¥ <%= number_with_delimiter(product.price.to_i) %></div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- 安心・安全への取り組み -->
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-6">
+      <div class="font-semibold mb-2 text-yellow-800">安心・安全への取り組み</div>
+      <div class="text-sm text-yellow-800">
+        お金は事務局に支払われ、評価後に振り込まれます。出品者、購入者ともに安心してお取引いただけます。
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 画像切り替え機能
+  function changeImage(thumbnail, imageUrl) {
+    // メイン画像を変更
+    const mainImage = document.getElementById('mainImage');
+    if (mainImage && mainImage.tagName === 'IMG') {
+      mainImage.src = imageUrl;
+    }
+    
+    // アクティブなサムネイルを更新
+    document.querySelectorAll('.thumbnail').forEach(thumb => {
+      thumb.classList.remove('border-red-500');
+      thumb.classList.add('border-transparent', 'hover:border-gray-300');
+    });
+    thumbnail.classList.remove('border-transparent', 'hover:border-gray-300');
+    thumbnail.classList.add('border-red-500');
+  }
+
+  // いいね機能
+  function toggleLike() {
+    const likeBtn = document.getElementById('likeBtn');
+    const likeIcon = document.getElementById('likeIcon');
+    const likeText = document.getElementById('likeText');
+    const likeCount = document.getElementById('likeCount');
+    
+    if (likeBtn.classList.contains('liked')) {
+      // いいね解除
+      likeBtn.classList.remove('liked', 'text-red-500', 'border-red-500');
+      likeBtn.classList.add('text-gray-600', 'border-gray-300');
+      likeIcon.textContent = '♡';
+      likeText.textContent = 'いいね';
+      likeCount.textContent = parseInt(likeCount.textContent) - 1;
+    } else {
+      // いいね追加
+      likeBtn.classList.add('liked', 'text-red-500', 'border-red-500');
+      likeBtn.classList.remove('text-gray-600', 'border-gray-300');
+      likeIcon.textContent = '♥';
+      likeText.textContent = 'いいね済み';
+      likeCount.textContent = parseInt(likeCount.textContent) + 1;
+    }
+  }
+
+  // カートに追加
+  function addToCart() {
+    alert('カートに追加しました');
+  }
+
+  // ページ読み込み時の初期化
+  document.addEventListener('DOMContentLoaded', function() {
+    // 画像のクリックイベント
+    const mainImage = document.getElementById('mainImage');
+    if (mainImage) {
+      mainImage.addEventListener('click', function() {
+        // 画像拡大表示の実装
+        alert('画像拡大表示（実装可能）');
+      });
+    }
+  });
+</script>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイページ - メルカリ風アプリ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="max-w-2xl mx-auto bg-white min-h-screen">
+        <!-- ヘッダー -->
+        <div class="bg-gradient-to-br from-red-400 to-red-500 text-white p-4 shadow-lg">
+            <h1 class="text-2xl font-bold">🛍️ マイページ</h1>
+        </div>
+
+        <!-- プロフィールセクション -->
+        <div class="bg-gradient-to-br from-red-400 to-red-500 text-white p-8 text-center">
+            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 text-4xl text-red-400 shadow-lg">
+                👤
+            </div>
+            <div class="text-xl font-bold mb-2">テストユーザー</div>
+            <div class="flex items-center justify-center gap-2 opacity-90">
+                <span>⭐ 4.8</span>
+                <span>・</span>
+                <span>評価 156件</span>
+            </div>
+        </div>
+
+        <!-- アクションボタン -->
+        <div class="bg-white p-0">
+            <!-- 出品した商品を見る -->
+            <a href="/products/my_products" class="block p-6 m-4 bg-gradient-to-r from-red-500 to-red-400 text-white text-center font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                <span class="block text-3xl mb-2">📦</span>
+                出品した商品を見る
+            </a>
+
+            <!-- 商品を出品する -->
+            <a href="/products/listing" class="block p-6 m-4 bg-gradient-to-r from-green-500 to-green-600 text-white text-center font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                <span class="block text-3xl mb-2">📸</span>
+                商品を出品する
+            </a>
+
+            <!-- いいね一覧 -->
+            <a href="#" onclick="showLikesModal()" class="block p-6 m-4 bg-gradient-to-r from-pink-500 to-pink-600 text-white text-center font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                <span class="block text-3xl mb-2">❤️</span>
+                いいね一覧
+            </a>
+
+            <!-- 住所変更 -->
+            <a href="#" onclick="showAddressModal()" class="block p-6 m-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                <span class="block text-3xl mb-2">🏠</span>
+                住所変更
+            </a>
+
+            <!-- ログアウト -->
+            <a href="#" onclick="showLogoutModal()" class="block p-6 m-4 bg-gradient-to-r from-red-600 to-red-700 text-white text-center font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                <span class="block text-3xl mb-2">🚪</span>
+                ログアウト
+            </a>
+        </div>
+    </div>
+
+    <!-- フローティングアクションボタン -->
+    <a href="/products/listing" class="fixed bottom-8 right-8 w-15 h-15 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full text-2xl flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-50">
+        +
+    </a>
+
+    <!-- いいね一覧モーダル -->
+    <div id="likesModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center hidden">
+        <div class="bg-white p-8 rounded-xl w-11/12 max-w-lg shadow-2xl max-h-4/5 overflow-y-auto">
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">❤️ いいね一覧</h3>
+            </div>
+            <div id="likesContent">
+                <!-- いいねした商品 -->
+                <div class="flex items-center p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200 cursor-pointer" onclick="goToProduct('product1')">
+                    <div class="w-15 h-15 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center text-2xl mr-4 flex-shrink-0">
+                        📱
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-bold text-sm mb-1 text-gray-800">iPhone 14 Pro 128GB シルバー</div>
+                        <div class="text-pink-600 font-bold text-base">¥98,000</div>
+                    </div>
+                </div>
+                <div class="flex items-center p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200 cursor-pointer" onclick="goToProduct('product2')">
+                    <div class="w-15 h-15 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center text-2xl mr-4 flex-shrink-0">
+                        👕
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-bold text-sm mb-1 text-gray-800">ユニクロ カシミヤセーター</div>
+                        <div class="text-pink-600 font-bold text-base">¥2,500</div>
+                    </div>
+                </div>
+                <div class="flex items-center p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200 cursor-pointer" onclick="goToProduct('product3')">
+                    <div class="w-15 h-15 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center text-2xl mr-4 flex-shrink-0">
+                        📚
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-bold text-sm mb-1 text-gray-800">プログラミング入門書 第3版</div>
+                        <div class="text-pink-600 font-bold text-base">¥1,800</div>
+                    </div>
+                </div>
+                <div class="flex items-center p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200 cursor-pointer" onclick="goToProduct('product4')">
+                    <div class="w-15 h-15 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center text-2xl mr-4 flex-shrink-0">
+                        ⌚
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-bold text-sm mb-1 text-gray-800">Apple Watch Series 9</div>
+                        <div class="text-pink-600 font-bold text-base">¥35,000</div>
+                    </div>
+                </div>
+                <div class="flex items-center p-4 hover:bg-gray-50 transition-colors duration-200 cursor-pointer" onclick="goToProduct('product5')">
+                    <div class="w-15 h-15 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center text-2xl mr-4 flex-shrink-0">
+                        🎧
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-bold text-sm mb-1 text-gray-800">AirPods Pro 第2世代</div>
+                        <div class="text-pink-600 font-bold text-base">¥18,500</div>
+                    </div>
+                </div>
+                
+                <!-- いいねした商品がない場合の表示（非表示状態） -->
+                <div class="text-center p-12 text-gray-500 hidden">
+                    <div class="text-5xl mb-4 opacity-50">💔</div>
+                    <p>まだいいねした商品がありません</p>
+                    <p class="text-sm text-gray-400 mt-2">気になる商品にいいねしてみましょう</p>
+                </div>
+            </div>
+            <div class="flex gap-4 mt-6">
+                <button class="flex-1 bg-gray-100 text-gray-700 py-3 px-6 rounded-md font-bold hover:bg-gray-200 hover:-translate-y-1 hover:shadow-lg transition-all duration-200" onclick="closeModal('likesModal')">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 住所変更モーダル -->
+    <div id="addressModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center hidden">
+        <div class="bg-white p-8 rounded-xl w-11/12 max-w-md shadow-2xl max-h-4/5 overflow-y-auto">
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">🏠 住所変更</h3>
+            </div>
+            <form id="addressForm">
+                <div class="mb-6">
+                    <label class="block mb-2 font-bold text-gray-700">郵便番号</label>
+                    <input type="text" id="zipCode" value="100-0001" placeholder="例: 100-0001" required class="w-full p-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200">
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2 font-bold text-gray-700">都道府県</label>
+                    <input type="text" id="prefecture" value="東京都" placeholder="例: 東京都" required class="w-full p-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200">
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2 font-bold text-gray-700">市区町村</label>
+                    <input type="text" id="city" value="千代田区" placeholder="例: 千代田区" required class="w-full p-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200">
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2 font-bold text-gray-700">番地・建物名</label>
+                    <textarea id="address" rows="3" placeholder="例: 千代田1-1-1 メルカリマンション101" required class="w-full p-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200 resize-none">千代田1-1-1 メルカリマンション101</textarea>
+                </div>
+            </form>
+            <div class="flex gap-4 mt-6">
+                <button class="flex-1 bg-gray-100 text-gray-700 py-3 px-6 rounded-md font-bold hover:bg-gray-200 hover:-translate-y-1 hover:shadow-lg transition-all duration-200" onclick="closeModal('addressModal')">キャンセル</button>
+                <button class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-md font-bold hover:-translate-y-1 hover:shadow-lg transition-all duration-200" onclick="saveAddress()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ログアウトモーダル -->
+    <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center hidden">
+        <div class="bg-white p-8 rounded-xl w-11/12 max-w-md shadow-2xl">
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">🚪 ログアウト</h3>
+            </div>
+            <p class="text-center text-gray-600 text-lg mb-6">
+                本当にログアウトしますか？
+            </p>
+            <div class="flex gap-4">
+                <button class="flex-1 bg-gray-100 text-gray-700 py-3 px-6 rounded-md font-bold hover:bg-gray-200 hover:-translate-y-1 hover:shadow-lg transition-all duration-200" onclick="closeModal('logoutModal')">キャンセル</button>
+                <button class="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white py-3 px-6 rounded-md font-bold hover:-translate-y-1 hover:shadow-lg transition-all duration-200" onclick="logout()">ログアウト</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showLikesModal() {
+            document.getElementById('likesModal').classList.remove('hidden');
+            document.getElementById('likesModal').classList.add('flex');
+        }
+
+        function showAddressModal() {
+            document.getElementById('addressModal').classList.remove('hidden');
+            document.getElementById('addressModal').classList.add('flex');
+        }
+
+        function showLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('hidden');
+            document.getElementById('logoutModal').classList.add('flex');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.getElementById(modalId).classList.remove('flex');
+        }
+
+        function goToProduct(productId) {
+            alert('商品ID: ' + productId + ' の詳細ページに移動します');
+            closeModal('likesModal');
+            // 実際のアプリでは商品詳細ページにリダイレクト
+            // window.location.href = '/products/' + productId;
+        }
+
+        function saveAddress() {
+            const zipCode = document.getElementById('zipCode').value;
+            const prefecture = document.getElementById('prefecture').value;
+            const city = document.getElementById('city').value;
+            const address = document.getElementById('address').value;
+
+            if (zipCode && prefecture && city && address) {
+                alert('住所情報を更新しました！\n' + 
+                      '〒' + zipCode + '\n' + 
+                      prefecture + city + '\n' + 
+                      address);
+                closeModal('addressModal');
+            } else {
+                alert('すべての項目を入力してください。');
+            }
+        }
+
+        function logout() {
+            alert('ログアウトしました！');
+            closeModal('logoutModal');
+            // 実際のアプリでは、ここでログアウト処理を実行
+            // window.location.href = '/logout';
+        }
+
+        // モーダル外をクリックしたら閉じる
+        window.onclick = function(event) {
+            const likesModal = document.getElementById('likesModal');
+            const addressModal = document.getElementById('addressModal');
+            const logoutModal = document.getElementById('logoutModal');
+            
+            if (event.target === likesModal) {
+                closeModal('likesModal');
+            }
+            if (event.target === addressModal) {
+                closeModal('addressModal');
+            }
+            if (event.target === logoutModal) {
+                closeModal('logoutModal');
+            }
+        }
+    </script>
+</body>
+</html>
+
+

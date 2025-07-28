@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メルカリ風ECサイト</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .button-container {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-listing {
+            background: #ea352d;
+            color: white;
+        }
+        
+        .btn-listing:hover {
+            background: #d32f2f;
+        }
+        
+        .btn-detail {
+            background: #666;
+            color: white;
+        }
+        
+        .btn-detail:hover {
+            background: #555;
+        }
+        
+        .btn-purchase {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-purchase:hover {
+            background: #218838;
+        }
+        
+        .btn-mypage {
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+        }
+        
+        .btn-mypage:hover {
+            background: linear-gradient(135deg, #ff5252, #ff7575);
+        }
+        
+        .icon {
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+        
+        @media (max-width: 768px) {
+            .button-container {
+                flex-direction: column;
+            }
+            
+            .btn {
+                text-align: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>メルカリ風ECサイト</h1>
+    <p>商品一覧ページです。</p>
+
+    <div class="button-container">
+        <a href="/products/listing" class="btn btn-listing">
+            <span class="icon">📝</span>
+            商品を出品する
+        </a>
+        
+        <a href="/products/1" class="btn btn-detail">
+            <span class="icon">👀</span>
+            商品詳細を見る
+        </a>
+        
+        <a href="/products/1/purchase" class="btn btn-purchase">
+            <span class="icon">💳</span>
+            購入ページ
+        </a>
+        
+        <a href="/mypage" class="btn btn-mypage">
+            <span class="icon">👤</span>
+            マイページ
+        </a>
+    </div>
+</body>
+</html>
