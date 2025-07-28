@@ -105,6 +105,6 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Product.count", -1) do
       delete product_path(product)
     end
-    assert_redirected_to products_path
+    assert_redirected_to my_products_products_path
   end
 end
