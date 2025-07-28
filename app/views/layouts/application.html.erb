@@ -4,7 +4,18 @@
     <title><%= content_for(:title) || "Rails Ec Site" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <%= csrf_meta_tags %> <%= csp_meta_tag %> <%= yield :head %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= yield :head %>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+    </style>
 
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/icon.png" type="image/png" />

@@ -1,7 +1,9 @@
 # config/routes.rb
 Rails.application.routes.draw do
-  get "users/mypage"
-  root "products#index"
+  root to: "home#top"  
+
+  get "/mypage", to: "users#mypage"
+  get "logins/new", to: "logins#new"
 
   resources :products do
     member do
@@ -11,11 +13,7 @@ Rails.application.routes.draw do
       get :listing
       get :my_products  # この行を追加
     end
-  end
-
-  get "/mypage", to: "users#mypage"
-  get "logins/new"
-  get "home/top"
+  end  
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
@@ -27,7 +25,5 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: "users/registrations"
   }
-
-  get "home/top", as: :home_top
-  root "home#top"
+  
 end
