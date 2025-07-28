@@ -26,7 +26,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
       prefecture_id: 1,
       shipping_day_id: 1,
       category_id: 1,
-      user_id: users(:one).id  # fixtureのユーザーを使用
+      user_id: users(:one).id,  # fixtureのユーザーを使用
+      description: "This is Test Product detail"
     )
     get product_path(product)
     assert_response :success
@@ -42,7 +43,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
       prefecture_id: 1,
       shipping_day_id: 1,
       category_id: 1,
-      user_id: users(:one).id  # fixtureのユーザーを使用
+      user_id: users(:one).id,  # fixtureのユーザーを使用
+      description: "This is Edit Product detail"
     )
     get edit_product_path(product)
     assert_response :success
@@ -59,7 +61,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
           prefecture_id: 1,
           shipping_day_id: 1,
           category_id: 1,
-          user_id: users(:one).id
+          user_id: users(:one).id,
+          description: "This is New Product detail"
         }
       }
     end
@@ -75,7 +78,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
       prefecture_id: 1,
       shipping_day_id: 1,
       category_id: 1,
-      user_id: users(:one).id
+      user_id: users(:one).id,
+      description: "This is Product detail"
     )
     patch product_path(product), params: {
       product: {
@@ -95,7 +99,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
       prefecture_id: 1,
       shipping_day_id: 1,
       category_id: 1,
-      user_id: users(:one).id
+      user_id: users(:one).id,
+      description: "This is Product detail"
     )
     assert_difference("Product.count", -1) do
       delete product_path(product)
