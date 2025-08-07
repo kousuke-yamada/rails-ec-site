@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
   delete 'logout', to: 'sessions#destroy'
-  get "/mypage", to: "users#mypage"
+  get '/mypage', to: 'users#mypage'
 
   resources :products do
     member do
