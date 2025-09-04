@@ -25,7 +25,7 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
-    
+
     # 仮のuser_idを設定（実際のアプリでは current_user.id を使用）
     @product.user_id = 1 # または current_user&.id
 
