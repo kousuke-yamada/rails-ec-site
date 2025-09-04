@@ -25,10 +25,14 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
+    
+    # 仮のuser_idを設定（実際のアプリでは current_user.id を使用）
+    @product.user_id = 1 # または current_user&.id
 
     if @product.save
       redirect_to @product, notice: "商品が正常に出品されました。"
     else
+      # バリデーションエラーがある場合はlistingページに戻る
       render :listing, status: :unprocessable_entity
     end
   end
@@ -66,7 +70,7 @@ class ProductsController < ApplicationController
   def product_params
     params.require(:product).permit(:name, :description, :price, :condition_id,
                                      :shipping_fee_payer_id, :prefecture_id,
-                                     :shipping_day_id, :category_id, :user_id,
+                                     :shipping_day_id, :category_id,
                                      images: [])
   end
 end
