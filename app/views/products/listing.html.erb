@@ -190,13 +190,13 @@
             </label>
             
             <!-- 画像プレビューエリア -->
-            <div id="image-preview-container" class="hidden mb-6">
+            <div id="image-preview-container" class="mb-6 hidden">
               <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-6" id="image-previews">
                 <!-- 画像プレビューがここに表示されます -->
               </div>
             </div>
             
-            <div class="upload-overlay border-2 border-dashed border-mercari-300 rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 hover:border-mercari-500 hover:bg-mercari-50 group" id="upload-area" onclick="document.getElementById('product_images').click()">
+            <div class="border-2 border-dashed border-mercari-300 rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 hover:border-mercari-500 hover:bg-mercari-50 group upload-overlay" id="upload-area">
               <div class="animate-float">
                 <div class="text-8xl mb-6 group-hover:scale-110 transition-transform duration-300">📸</div>
               </div>
@@ -216,46 +216,19 @@
         </div>
       </section>
 
-     
-    </form>
-  </main>
-
-
-  <!-- JavaScript連携 -->
-  <script src="/assets/javascripts/listing.js"></script>
-  <script>
-    // アップロードエリアのクリック機能を追加（listing.jsと連携）
-    document.addEventListener('DOMContentLoaded', function() {
-      // アップロードエリアのクリック機能は既にonclick属性で設定済み
-      
-      // 価格入力時の手数料計算（listing.jsと重複回避）
-      const priceInput = document.querySelector('input[name="product[price]"]');
-      const feeElement = document.getElementById('fee-amount');
-      const profitElement = document.getElementById('profit-amount');
-      
-      if (priceInput && feeElement && profitElement) {
-        priceInput.addEventListener('input', function(e) {
-          const price = parseInt(e.target.value) || 0;
-          const fee = Math.floor(price * 0.1);
-          const profit = price - fee;
-          
-          feeElement.textContent = fee > 0 ? `¥ ${fee.toLocaleString()}` : '¥ -';
-          profitElement.textContent = profit > 0 ? `¥ ${profit.toLocaleString()}` : '¥ -';
-        });
-      }
-      
-      // デバッグ用：画像選択が機能しているかテスト
-      const fileInput = document.getElementById('product_images');
-      if (fileInput) {
-        fileInput.addEventListener('change', function() {
-          console.log('ファイルが選択されました:', this.files.length, '枚');
-        });
-      }
-    });
-  </script>
-
-</body>
-</html></p>
+      <!-- カテゴリーと状態セクション -->
+      <section class="section-enter interactive-hover">
+        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+          <div class="bg-gradient-to-r from-blue-500 to-blue-400 px-8 py-6">
+            <div class="flex items-center text-white">
+              <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mr-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a1.994 1.994 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold">商品の詳細</h2>
+                <p class="text-blue-100 text-sm">カテゴリーと状態を選択してください</p>
               </div>
             </div>
           </div>
@@ -268,9 +241,16 @@
               </label>
               <select name="product[category_id]" class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl bg-white focus:outline-none focus:border-mercari-500 focus:ring-4 focus:ring-mercari-100 transition-all duration-300 text-lg font-medium" required>
                 <option value="">カテゴリーを選択してください</option>
-                <% Settings.product.categories.each do |id, name| %>
-                  <option value="<%= id %>"><%= name %></option>
-                <% end %>
+                <option value="1">レディース</option>
+                <option value="2">メンズ</option>
+                <option value="3">ベビー・キッズ</option>
+                <option value="4">インテリア・住まい・小物</option>
+                <option value="5">本・音楽・ゲーム</option>
+                <option value="6">おもちゃ・ホビー・グッズ</option>
+                <option value="7">コスメ・香水・美容</option>
+                <option value="8">家電・スマホ・カメラ</option>
+                <option value="9">スポーツ・レジャー</option>
+                <option value="10">ハンドメイド</option>
               </select>
             </div>
             
@@ -281,9 +261,12 @@
               </label>
               <select name="product[condition_id]" class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl bg-white focus:outline-none focus:border-mercari-500 focus:ring-4 focus:ring-mercari-100 transition-all duration-300 text-lg font-medium" required>
                 <option value="">状態を選択してください</option>
-                <% Settings.product.conditions.each do |id, name| %>
-                  <option value="<%= id %>"><%= name %></option>
-                <% end %>
+                <option value="1">新品、未使用</option>
+                <option value="2">未使用に近い</option>
+                <option value="3">目立った傷や汚れなし</option>
+                <option value="4">やや傷や汚れあり</option>
+                <option value="5">傷や汚れあり</option>
+                <option value="6">全体的に状態が悪い</option>
               </select>
             </div>
           </div>
@@ -353,9 +336,8 @@
                 </label>
                 <select name="product[shipping_fee_payer_id]" class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl bg-white focus:outline-none focus:border-mercari-500 focus:ring-4 focus:ring-mercari-100 transition-all duration-300 text-lg font-medium" required>
                   <option value="">選択してください</option>
-                  <% Settings.product.shipping_fee_payers.each do |id, name| %>
-                    <option value="<%= id %>"><%= name %></option>
-                  <% end %>
+                  <option value="1">送料込み（出品者負担）</option>
+                  <option value="2">着払い（購入者負担）</option>
                 </select>
               </div>
               
@@ -366,9 +348,9 @@
                 </label>
                 <select name="product[shipping_day_id]" class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl bg-white focus:outline-none focus:border-mercari-500 focus:ring-4 focus:ring-mercari-100 transition-all duration-300 text-lg font-medium" required>
                   <option value="">選択してください</option>
-                  <% Settings.product.shipping_days.each do |id, name| %>
-                    <option value="<%= id %>"><%= name %></option>
-                  <% end %>
+                  <option value="1">1〜2日で発送</option>
+                  <option value="2">2〜3日で発送</option>
+                  <option value="3">4〜7日で発送</option>
                 </select>
               </div>
             </div>
@@ -380,9 +362,53 @@
               </label>
               <select name="product[prefecture_id]" class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl bg-white focus:outline-none focus:border-mercari-500 focus:ring-4 focus:ring-mercari-100 transition-all duration-300 text-lg font-medium" required>
                 <option value="">都道府県を選択してください</option>
-                <% Settings.product.prefectures.each do |id, name| %>
-                  <option value="<%= id %>"><%= name %></option>
-                <% end %>
+                <option value="1">北海道</option>
+                <option value="2">青森県</option>
+                <option value="3">岩手県</option>
+                <option value="4">宮城県</option>
+                <option value="5">秋田県</option>
+                <option value="6">山形県</option>
+                <option value="7">福島県</option>
+                <option value="8">茨城県</option>
+                <option value="9">栃木県</option>
+                <option value="10">群馬県</option>
+                <option value="11">埼玉県</option>
+                <option value="12">千葉県</option>
+                <option value="13">東京都</option>
+                <option value="14">神奈川県</option>
+                <option value="15">新潟県</option>
+                <option value="16">富山県</option>
+                <option value="17">石川県</option>
+                <option value="18">福井県</option>
+                <option value="19">山梨県</option>
+                <option value="20">長野県</option>
+                <option value="21">岐阜県</option>
+                <option value="22">静岡県</option>
+                <option value="23">愛知県</option>
+                <option value="24">三重県</option>
+                <option value="25">滋賀県</option>
+                <option value="26">京都府</option>
+                <option value="27">大阪府</option>
+                <option value="28">兵庫県</option>
+                <option value="29">奈良県</option>
+                <option value="30">和歌山県</option>
+                <option value="31">鳥取県</option>
+                <option value="32">島根県</option>
+                <option value="33">岡山県</option>
+                <option value="34">広島県</option>
+                <option value="35">山口県</option>
+                <option value="36">徳島県</option>
+                <option value="37">香川県</option>
+                <option value="38">愛媛県</option>
+                <option value="39">高知県</option>
+                <option value="40">福岡県</option>
+                <option value="41">佐賀県</option>
+                <option value="42">長崎県</option>
+                <option value="43">熊本県</option>
+                <option value="44">大分県</option>
+                <option value="45">宮崎県</option>
+                <option value="46">鹿児島県</option>
+                <option value="47">沖縄県</option>
               </select>
             </div>
           </div>
@@ -472,4 +498,19 @@
                   <p class="font-semibold text-gray-900">出品前の確認事項</p>
                   <ul class="space-y-1 text-gray-600">
                     <li>• 禁止されている出品物でないか確認してください</li>
-                    <li>• 商品情報に虚偽の記載がな認いか確
+                    <li>• 商品情報に虚偽の記載がないか確認してください</li>
+                    <li>• 写真と商品説明が一致しているか確認してください</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </form>
+  </main>
+  <!-- app/views/products/listing.html.erb -->
+  <script src="/javascripts/listing.js"></script>
+</body>
+</html>

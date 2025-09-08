@@ -1,4 +1,5 @@
 // 出品フォーム用JavaScript
+console.log('listing.js file loaded');
 let selectedFiles = [];
 
 document.addEventListener('DOMContentLoaded', function() {

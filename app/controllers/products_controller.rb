@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy, :purchase ]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
 
   def index
     @products = Product.all.order(created_at: :desc)
@@ -25,14 +26,11 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
-
-    # 仮のuser_idを設定（実際のアプリでは current_user.id を使用）
-    @product.user_id = 1 # または current_user&.id
-
+    @product.user = current_user  # ログイン中のユーザーを設定
+    
     if @product.save
       redirect_to @product, notice: "商品が正常に出品されました。"
     else
-      # バリデーションエラーがある場合はlistingページに戻る
       render :listing, status: :unprocessable_entity
     end
   end
