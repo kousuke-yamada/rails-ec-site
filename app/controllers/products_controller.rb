@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy, :purchase ]
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :authenticate_user!, only: [ :create, :update, :destroy ]
 
   def index
     @products = Product.all.order(created_at: :desc)
@@ -27,7 +27,7 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(product_params)
     @product.user = current_user  # ログイン中のユーザーを設定
-    
+
     if @product.save
       redirect_to @product, notice: "商品が正常に出品されました。"
     else
