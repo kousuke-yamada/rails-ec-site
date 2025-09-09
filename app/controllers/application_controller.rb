@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
     # Log what Settings contains to debug
     Rails.logger.info "Settings.conditions: #{Settings.conditions.inspect}"
     Rails.logger.info "Settings.product: #{Settings.product.inspect}"
-    
+
     # You could also set default values here if needed
     Settings.conditions ||= {}
     Settings.product.categories ||= {} if Settings.product.respond_to?(:categories)
