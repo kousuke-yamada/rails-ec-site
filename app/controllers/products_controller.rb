@@ -60,12 +60,6 @@ class ProductsController < ApplicationController
   end
 
 
-  setup do
-    @product = products(:one)
-    @user = users(:one) # または適切なユーザーfixture
-    sign_in @user # Deviseの場合
-    # または login_as @user # 他の認証gemの場合
-  end
 
   private
 
