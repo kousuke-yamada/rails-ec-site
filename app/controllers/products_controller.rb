@@ -59,6 +59,14 @@ class ProductsController < ApplicationController
     redirect_to my_products_products_path, notice: "商品を削除しました。"
   end
 
+
+  setup do
+    @product = products(:one)
+    @user = users(:one) # または適切なユーザーfixture
+    sign_in @user # Deviseの場合
+    # または login_as @user # 他の認証gemの場合
+  end
+
   private
 
   def set_product
