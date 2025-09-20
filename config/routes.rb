@@ -5,22 +5,23 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
   get "/mypage", to: "users#mypage"
+  
+  get "profile", to: "users#profile"
+  patch "profile", to: "users#update_profile", as: "update_profile"
+  patch "profile/password", to: "users#update_password", as: "update_password"
 
-  resources :products do
+
+  resources :products do  # only制限を削除してすべてのアクションを有効化
     member do
       get :purchase
     end
     collection do
       get :listing
-      get :my_products  # この行を追加
+      get :my_products 
     end
   end
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   devise_for :users, controllers: {

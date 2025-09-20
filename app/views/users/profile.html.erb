@@ -1,0 +1,559 @@
+<!-- app/views/users/profile.html.erb -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロフィール - TANITSUBO-YAMA</title>
+    
+    <!-- CSRFトークンを追加 -->
+    <%= csrf_meta_tags %>
+    
+    <!-- Rails CSS assets -->
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- ヘッダー -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center">
+                <%= link_to mypage_path, class: "mr-4 p-2 hover:bg-gray-100 rounded-full transition duration-200" do %>
+                    <svg class="h-6 w-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                <% end %>
+                <h1 class="text-xl font-medium text-gray-900">プロフィール</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- メッセージ表示エリア -->
+    <div id="messageContainer" class="max-w-4xl mx-auto px-4 pt-4" style="display: none;">
+        <div id="messageAlert" class="rounded-md p-4 mb-4">
+            <div class="flex">
+                <div class="ml-3">
+                    <p id="messageText" class="text-sm font-medium"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 py-6">
+        <!-- 基本情報 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-4">基本情報</h2>
+
+                <!-- 名前 -->
+                <div class="flex items-center justify-between py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition duration-200" onclick="editField('name')">
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-700 w-32">名前</span>
+                        <span class="text-sm text-gray-900 ml-4" id="display-name"><%= current_user.name || "未設定" %></span>
+                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-full transition duration-200">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- パスワード -->
+                <div class="flex items-center justify-between py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition duration-200" onclick="editField('password')">
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-700 w-32">パスワード</span>
+                        <span class="text-sm text-gray-900 ml-4">••••••••</span>
+                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-full transition duration-200">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 性別 -->
+                <div class="flex items-center justify-between py-4 cursor-pointer hover:bg-gray-50 transition duration-200" onclick="editField('gender')">
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-700 w-32">性別</span>
+                        <span class="text-sm text-gray-900 ml-4" id="display-gender"><%= current_user.gender_display %></span>
+                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-full transition duration-200">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 連絡先情報 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-6">連絡先情報</h2>
+                
+                <!-- メール -->
+                <div class="flex items-center justify-between py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition duration-200" onclick="editField('email')">
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-700 w-32">メール</span>
+                        <span class="text-sm text-gray-900 ml-4" id="display-email"><%= current_user.email %></span>
+                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-full transition duration-200">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 電話 -->
+                <div class="flex items-center justify-between py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition duration-200" onclick="editField('phone')">
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-700 w-32">電話</span>
+                        <span class="text-sm text-gray-900 ml-4" id="display-phone"><%= current_user.formatted_phone %></span>
+                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-full transition duration-200">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 住所 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-4">住所</h2>
+                
+                <!-- 自宅 -->
+                <div class="flex items-center justify-between py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition duration-200" onclick="editField('home_address')">
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-700 w-32">自宅</span>
+                        <span class="text-sm text-gray-900 ml-4" id="display-address"><%= current_user.formatted_address %></span>
+                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-full transition duration-200">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 編集モーダル -->
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900" id="editModalTitle">情報を編集</h3>
+                    <button onclick="closeEditModal()" class="p-2 hover:bg-gray-100 rounded-full transition duration-200">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div id="editModalContent">
+                    <!-- 動的にコンテンツが挿入される -->
+                </div>
+                
+                <div class="flex justify-end gap-3 mt-6">
+                    <button onclick="closeEditModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition duration-200">
+                        キャンセル
+                    </button>
+                    <button onclick="saveEdit()" id="saveButton" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 transition duration-200">
+                        保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditField = null;
+
+        // CSRFトークンを取得
+        function getCSRFToken() {
+            const token = document.querySelector('meta[name="csrf-token"]');
+            const tokenValue = token ? token.getAttribute('content') : null;
+            return tokenValue;
+        }
+
+        // メッセージ表示
+        function showMessage(message, isSuccess = true) {
+            const container = document.getElementById('messageContainer');
+            const alert = document.getElementById('messageAlert');
+            const text = document.getElementById('messageText');
+            
+            text.textContent = message;
+            
+            if (isSuccess) {
+                alert.className = 'rounded-md p-4 mb-4 bg-green-50 border border-green-200';
+                text.className = 'text-sm font-medium text-green-800';
+            } else {
+                alert.className = 'rounded-md p-4 mb-4 bg-red-50 border border-red-200';
+                text.className = 'text-sm font-medium text-red-800';
+            }
+            
+            container.style.display = 'block';
+            
+            // 3秒後に非表示
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 3000);
+        }
+
+        // 現在の値を取得
+        function getCurrentValue(field) {
+            switch(field) {
+                case 'name':
+                    const nameElement = document.getElementById('display-name');
+                    return nameElement ? nameElement.textContent.trim() : '';
+                case 'email':
+                    const emailElement = document.getElementById('display-email');
+                    return emailElement ? emailElement.textContent.trim() : '';
+                case 'phone':
+                    const phoneElement = document.getElementById('display-phone');
+                    if (phoneElement) {
+                        const phoneText = phoneElement.textContent.trim();
+                        // "未設定"の場合は空文字を返す
+                        if (phoneText === '未設定') return '';
+                        // ハイフンを除去して数字のみを返す
+                        return phoneText.replace(/[-\s]/g, '');
+                    }
+                    return '';
+                case 'gender':
+                    return '<%= j(current_user.gender || "") %>';
+                case 'home_address':
+                    return '<%= j(current_user.home_address || "") %>';
+                case 'zip_code':
+                    return '<%= j(current_user.zip_code || "") %>';
+                default:
+                    return '';
+            }
+        }
+
+        function editField(fieldName) {
+            currentEditField = fieldName;
+            const modal = document.getElementById('editModal');
+            const title = document.getElementById('editModalTitle');
+            const content = document.getElementById('editModalContent');
+            
+            if (!modal || !title || !content) {
+                showMessage('モーダル要素が見つかりません', false);
+                return;
+            }
+            
+            const fieldConfig = {
+                'name': {
+                    title: '名前を編集',
+                    content: `
+                        <label class="block text-sm font-medium text-gray-700 mb-2">名前</label>
+                        <input type="text" id="editInput" value="${getCurrentValue('name')}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    `
+                },
+                'password': {
+                    title: 'パスワードを変更',
+                    content: `
+                        <label class="block text-sm font-medium text-gray-700 mb-2">現在のパスワード</label>
+                        <input type="password" id="currentPassword" placeholder="現在のパスワード" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">新しいパスワード</label>
+                        <input type="password" id="newPassword" placeholder="新しいパスワード" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">新しいパスワード（確認）</label>
+                        <input type="password" id="confirmPassword" placeholder="新しいパスワードを再入力" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    `
+                },
+                'gender': {
+                    title: '性別を編集',
+                    content: `
+                        <label class="block text-sm font-medium text-gray-700 mb-2">性別</label>
+                        <select id="editInput" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">選択してください</option>
+                            <option value="male">男性</option>
+                            <option value="female">女性</option>
+                            <option value="other">その他</option>
+                        </select>
+                    `
+                },
+                'email': {
+                    title: 'メールアドレスを編集',
+                    content: `
+                        <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                        <input type="email" id="editInput" value="${getCurrentValue('email')}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    `
+                },
+                'phone': {
+                    title: '電話番号を編集',
+                    content: `
+                        <label class="block text-sm font-medium text-gray-700 mb-2">電話番号</label>
+                        <input type="tel" id="editInput" value="${getCurrentValue('phone')}" placeholder="09012345678" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <p class="text-xs text-gray-500 mt-1">ハイフンなしで入力してください</p>
+                    `
+                },
+                'home_address': {
+                    title: '自宅住所を編集',
+                    content: `
+                        <label class="block text-sm font-medium text-gray-700 mb-2">郵便番号</label>
+                        <input type="text" id="zipCode" value="${getCurrentValue('zip_code')}" placeholder="100-0001" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">住所</label>
+                        <textarea id="editInput" placeholder="東京都千代田区..." rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none">${getCurrentValue('home_address')}</textarea>
+                    `
+                }
+            };
+            
+            if (fieldConfig[fieldName]) {
+                title.textContent = fieldConfig[fieldName].title;
+                content.innerHTML = fieldConfig[fieldName].content;
+                
+                // 性別のselect要素に現在の値をセット
+                if (fieldName === 'gender') {
+                    const selectElement = document.getElementById('editInput');
+                    if (selectElement) {
+                        selectElement.value = getCurrentValue('gender');
+                    }
+                }
+            } else {
+                title.textContent = '情報を編集';
+                content.innerHTML = `<p class="text-gray-600">この項目の編集機能は準備中です。</p>`;
+            }
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            currentEditField = null;
+        }
+
+        async function saveEdit() {
+            const saveButton = document.getElementById('saveButton');
+            const originalText = saveButton.textContent;
+            
+            // ボタンを無効化
+            saveButton.disabled = true;
+            saveButton.textContent = '保存中...';
+            
+            try {
+                if (currentEditField === 'password') {
+                    await updatePassword();
+                } else {
+                    await updateProfile();
+                }
+            } catch (error) {
+                console.error('保存エラー:', error);
+                showMessage('保存中にエラーが発生しました。', false);
+            } finally {
+                // ボタンを有効化
+                saveButton.disabled = false;
+                saveButton.textContent = originalText;
+            }
+        }
+
+        async function updatePassword() {
+            const currentPassword = document.getElementById('currentPassword');
+            const newPassword = document.getElementById('newPassword');
+            const confirmPassword = document.getElementById('confirmPassword');
+            
+            if (!currentPassword.value.trim()) {
+                showMessage('現在のパスワードを入力してください。', false);
+                return;
+            }
+            
+            if (!newPassword.value.trim()) {
+                showMessage('新しいパスワードを入力してください。', false);
+                return;
+            }
+            
+            if (newPassword.value.length < 6) {
+                showMessage('新しいパスワードは6文字以上で入力してください。', false);
+                return;
+            }
+            
+            if (newPassword.value !== confirmPassword.value) {
+                showMessage('新しいパスワードと確認用パスワードが一致しません。', false);
+                return;
+            }
+            
+            const response = await fetch('/profile/password', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': getCSRFToken(),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    current_password: currentPassword.value,
+                    new_password: newPassword.value,
+                    password_confirmation: confirmPassword.value
+                })
+            });
+            
+            const result = await response.json();
+
+
+            if (result.success) {
+                showMessage(result.message, true);
+                closeEditModal();
+            } else {
+                showMessage(result.message, false);
+            }
+        }
+
+        async function updateProfile() {
+            const input = document.getElementById('editInput');
+            let updateData = {};
+            
+            if (currentEditField === 'home_address') {
+                const zipCode = document.getElementById('zipCode');
+                updateData = {
+                    user: {
+                        home_address: input.value,
+                        zip_code: zipCode.value
+                    }
+                };
+            } else {
+                if (!input.value.trim() && currentEditField !== 'phone') {
+                    showMessage('有効な値を入力してください。', false);
+                    return;
+                }
+                
+                updateData = {
+                    user: {
+                        [currentEditField]: input.value
+                    }
+                };
+            }
+            
+            // CSRFトークン取得
+            const csrfToken = getCSRFToken();
+            if (!csrfToken) {
+                console.error('CSRF token not found');
+                showMessage('セキュリティトークンが見つかりません。ページを再読み込みしてください。', false);
+                return;
+            }
+            
+            try {
+                const response = await fetch('/profile', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(updateData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+
+                if (result.success) {
+                    // 画面の表示を更新
+                    if (result.user) {
+                        updateDisplayValues(result.user);
+                    }
+                    showMessage(result.message, true);
+                    closeEditModal();
+                } else {
+                    showMessage(result.message + (result.errors ? ': ' + result.errors.join(', ') : ''), false);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showMessage(`ネットワークエラーが発生しました: ${error.message}`, false);
+            }
+        }
+
+        function updateDisplayValues(userData) {
+            
+            // userDataが正しく渡されているかチェック
+            if (!userData || typeof userData !== 'object') {
+                console.error('Invalid userData:', userData);
+                return;
+            }
+
+            const displayName = document.getElementById('display-name');
+            const displayEmail = document.getElementById('display-email');
+            const displayPhone = document.getElementById('display-phone');
+            const displayGender = document.getElementById('display-gender');
+            const displayAddress = document.getElementById('display-address');
+            
+            // 安全な更新処理に変更
+            if (displayName && userData.name) {
+                displayName.textContent = userData.name;
+            }
+            
+            if (displayEmail && userData.email) {
+                displayEmail.textContent = userData.email;
+            }
+            
+            // 電話番号の表示更新
+            if (displayPhone) {
+                if (userData.phone && userData.phone.toString().trim() !== '') {
+                    // 電話番号をフォーマット
+                    const cleanPhone = userData.phone.toString().replace(/[-\s]/g, '');
+                    let formattedPhone = cleanPhone;
+                    if (cleanPhone.length === 10) {
+                        formattedPhone = `${cleanPhone.slice(0,3)}-${cleanPhone.slice(3,7)}-${cleanPhone.slice(7)}`;
+                    } else if (cleanPhone.length === 11) {
+                        formattedPhone = `${cleanPhone.slice(0,3)}-${cleanPhone.slice(3,7)}-${cleanPhone.slice(7)}`;
+                    }
+                    displayPhone.textContent = formattedPhone;
+                } else {
+                    displayPhone.textContent = '未設定';
+                }
+            }
+            
+            // 性別の表示更新
+            if (displayGender) {
+                const genderMap = { 'male': '男性', 'female': '女性', 'other': 'その他' };
+                displayGender.textContent = genderMap[userData.gender] || '未設定';
+            }
+            
+            // 住所の表示更新
+            if (displayAddress) {
+                let addressText = '未設定';
+                if (userData.home_address && userData.home_address.toString().trim() !== '') {
+                    addressText = userData.zip_code ? 
+                        `〒${userData.zip_code} ${userData.home_address}` : 
+                        userData.home_address;
+                }
+                displayAddress.textContent = addressText;
+            }
+        }
+
+        // モーダル外クリックで閉じる
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        };
+
+        // ESCキーで閉じる
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEditModal();
+            }
+        });
+    </script>
+
+    <!-- Rails JavaScript assets -->
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+</body>
+</html>
