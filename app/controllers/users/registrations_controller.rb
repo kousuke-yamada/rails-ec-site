@@ -5,7 +5,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     # 電話番号のクリーニング
     if sign_up_params[:phone].present?
-      params[:user][:phone] = sign_up_params[:phone].gsub(/[-\s]/, '')
+      params[:user][:phone] = sign_up_params[:phone].gsub(/[-\s]/, "")
     end
 
     build_resource(sign_up_params)

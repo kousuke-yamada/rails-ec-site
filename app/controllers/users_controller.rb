@@ -27,17 +27,17 @@ class UsersController < ApplicationController
 
     # 電話番号のクリーニング
     if user_params[:phone].present?
-      cleaned_phone = user_params[:phone].gsub(/[-\s]/, '')
+      cleaned_phone = user_params[:phone].gsub(/[-\s]/, "")
       params[:user][:phone] = cleaned_phone
       Rails.logger.info "Cleaned phone: #{cleaned_phone}"
     end
 
     respond_to do |format|
       if @user.update(user_params)
-        format.json { 
-          render json: { 
-            success: true, 
-            message: '情報が正常に更新されました。',
+        format.json {
+          render json: {
+            success: true,
+            message: "情報が正常に更新されました。",
             user: {
               name: @user.name,
               email: @user.email,
@@ -50,11 +50,11 @@ class UsersController < ApplicationController
         }
       else
         Rails.logger.error "Update failed: #{@user.errors.full_messages}"
-        format.json { 
-          render json: { 
-            success: false, 
-            message: '更新に失敗しました。',
-            errors: @user.errors.full_messages 
+        format.json {
+          render json: {
+            success: false,
+            message: "更新に失敗しました。",
+            errors: @user.errors.full_messages
           }, status: 422
         }
       end
@@ -78,26 +78,26 @@ class UsersController < ApplicationController
         if @user.update(password: params[:new_password], password_confirmation: params[:password_confirmation])
           # パスワード更新後は再ログインが必要
           bypass_sign_in(@user)
-          format.json { 
-            render json: { 
-              success: true, 
-              message: 'パスワードが正常に変更されました。' 
+          format.json {
+            render json: {
+              success: true,
+              message: "パスワードが正常に変更されました。"
             }
           }
         else
-          format.json { 
-            render json: { 
-              success: false, 
-              message: 'パスワードの更新に失敗しました。',
-              errors: @user.errors.full_messages 
+          format.json {
+            render json: {
+              success: false,
+              message: "パスワードの更新に失敗しました。",
+              errors: @user.errors.full_messages
             }, status: 422
           }
         end
       else
-        format.json { 
-          render json: { 
-            success: false, 
-            message: '現在のパスワードが正しくありません。' 
+        format.json {
+          render json: {
+            success: false,
+            message: "現在のパスワードが正しくありません。"
           }, status: 422
         }
       end

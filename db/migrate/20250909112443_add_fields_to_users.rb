@@ -6,7 +6,7 @@ class AddFieldsToUsers < ActiveRecord::Migration[7.0]
     add_column :users, :gender, :string
     add_column :users, :home_address, :text
     add_column :users, :zip_code, :string
-    
+
     # インデックスの追加（既に存在しない場合のみ）
     add_index :users, :phone unless index_exists?(:users, :phone)
   end

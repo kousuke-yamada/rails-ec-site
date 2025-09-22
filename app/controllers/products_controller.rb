@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, except: [ :index, :show ]
   before_action :set_product, only: [ :show, :edit, :update, :destroy, :purchase ]
 
   def index
@@ -10,7 +10,7 @@ class ProductsController < ApplicationController
     if user_signed_in?
       @products = current_user.products.order(created_at: :desc)
     else
-      redirect_to new_user_session_path, alert: 'ログインしてください'
+      redirect_to new_user_session_path, alert: "ログインしてください"
     end
   end
 

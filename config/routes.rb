@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
   get "/mypage", to: "users#mypage"
-  
+
   get "profile", to: "users#profile"
   patch "profile", to: "users#update_profile", as: "update_profile"
   patch "profile/password", to: "users#update_password", as: "update_password"
@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     end
     collection do
       get :listing
-      get :my_products 
+      get :my_products
     end
   end
 
