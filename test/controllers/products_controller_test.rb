@@ -2,7 +2,7 @@ require "test_helper"
 
 class ProductsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
-  
+
   setup do
     @product = products(:one)  # 修正
     @user = users(:one)
@@ -21,8 +21,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create product" do
     assert_difference("Product.count") do
-      post products_url, params: { product: {  
-        name: "Test Product", 
+      post products_url, params: { product: {
+        name: "Test Product",
         price: 1000,
         description: "Test description",
         category: "electronics",

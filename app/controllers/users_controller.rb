@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!  
-  before_action :set_user, only: [:update_profile, :update_password, :profile] 
+  before_action :authenticate_user!
+  before_action :set_user, only: [ :update_profile, :update_password, :profile ]
 
   def mypage
     @user_name = "田中 太郎"
