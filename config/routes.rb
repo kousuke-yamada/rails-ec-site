@@ -1,9 +1,6 @@
 # config/routes.rb
 Rails.application.routes.draw do
   root to: "home#top"
-  get 'login', to: 'sessions#new'
-  post 'login', to: 'sessions#create'
-  delete 'logout', to: 'sessions#destroy'
   get "/mypage", to: "users#mypage"
 
   resources :products do
