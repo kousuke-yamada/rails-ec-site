@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy, :purchase ]
+  # before_action :authenticate_user!, only: [ :create, :update, :destroy ]
 
   def index
     @products = Product.all.order(created_at: :desc)
@@ -25,6 +26,7 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
+    @product.user = current_user  # ログイン中のユーザーを設定
 
     if @product.save
       redirect_to @product, notice: "商品が正常に出品されました。"
@@ -57,6 +59,8 @@ class ProductsController < ApplicationController
     redirect_to my_products_products_path, notice: "商品を削除しました。"
   end
 
+
+
   private
 
   def set_product
@@ -66,7 +70,7 @@ class ProductsController < ApplicationController
   def product_params
     params.require(:product).permit(:name, :description, :price, :condition_id,
                                      :shipping_fee_payer_id, :prefecture_id,
-                                     :shipping_day_id, :category_id, :user_id,
+                                     :shipping_day_id, :category_id,
                                      images: [])
   end
 end
