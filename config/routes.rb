@@ -4,9 +4,14 @@ Rails.application.routes.draw do
   get "/mypage", to: "users#mypage"
 
   resources :products do
-    member do
-      get :purchase
-    end
+    collection do
+    get :listing
+    post :create  # これで /products POST が products#create にルーティング
+    get :my_products
+  end
+  member do
+    get :purchase
+  end
     collection do
       get :listing
       get :my_products  # この行を追加
