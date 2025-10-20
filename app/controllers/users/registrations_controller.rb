@@ -3,6 +3,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [ :create ]
 
   def create
+    # 電話番号のクリーニング
+    if sign_up_params[:phone].present?
+      params[:user][:phone] = sign_up_params[:phone].gsub(/[-\s]/, "")
+    end
+
     build_resource(sign_up_params)
 
     resource.save
@@ -28,7 +33,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       set_minimum_password_length
       respond_to do |format|
         format.html { respond_with resource }
-        format.json { render json: { errors: resource.errors.messages, error: resource.errors.full_messages.to_sentence }, status: :unprocessable_entity }
+        format.json { render json: { success: false, errors: resource.errors.full_messages }, status: 422 }
       end
     end
   end

@@ -1,4 +1,6 @@
 class Product < ApplicationRecord
+  self.table_name = "products_listings"
+
   has_many_attached :images
   belongs_to :user
 

@@ -5,18 +5,19 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
-  name: “user_one”
-  email: alice@example.com
+  email: "test@example.com"
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
-  created_at: <%= Time.current %>
-  updated_at: <%= Time.current %>
-# column: value
-#
-two:
-  name: “user_two”
-  email: bob@example.com
-  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
-  created_at: <%= Time.current %>
-  updated_at: <%= Time.current %>
-# column: value
+  name: "Test User"
+  phone: "090-1234-5678"
+  gender: "male"
+  home_address: "Tokyo"
+  zip_code: "100-0001"
 
+two:
+  email: "test2@example.com"
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  name: "Test User 2"
+  phone: "090-8765-4321"
+  gender: "female"
+  home_address: "Osaka"
+  zip_code: "530-0001"

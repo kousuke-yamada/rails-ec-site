@@ -93,9 +93,9 @@
                             class: "text-gray-700 hover:text-black font-medium px-4 py-2 transition duration-200" %>
                     <% end %>
                     
-                    <button class="bg-red-500 text-white font-medium py-2 px-6 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200">
-                        出品
-                    </button>
+                    <%= link_to listing_products_path, class: "bg-red-500 text-white font-medium py-2 px-6 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200 no-underline inline-block text-center" do %>
+                     出品
+                    <% end %>
                 </div>
             </div>
         </div>
@@ -154,82 +154,59 @@
             <div class="w-24 h-1 bg-black"></div>
         </div>
 
-        <!-- 商品グリッド -->
+        <!-- 商品グリッド（動的データに変更） -->
         <div class="grid grid-cols-4 gap-6">
-            <!-- 商品カード1 -->
+          <% @products.each do |product| %>
+            <!-- 商品カード -->
             <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
-                <div class="relative">
-                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
-                        <span class="text-gray-500 text-sm">商品画像A</span>
-                    </div>
+              <div class="relative">
+                <div class="w-full h-64 bg-gray-200 flex items-center justify-center overflow-hidden">
+                  <% if product.images.any? %>
+                    <%= image_tag product.images.first, 
+                        class: "w-full h-full object-cover",
+                        alt: product.name %>
+                  <% else %>
+                    <span class="text-gray-500 text-sm">画像なし</span>
+                  <% end %>
                 </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">ダミー商品A</h3>
-                    <p class="text-2xl font-bold text-black mb-3">¥12,800</p>
-                    <p class="text-gray-600 mb-4 line-clamp-2">これはダミーの商品Aの説明文です。商品の詳細な情報をここに記載します。</p>
-                    <button class="w-full bg-black text-white font-medium py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
-                        詳細を見る
-                    </button>
-                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2"><%= product.name %></h3>
+                <p class="text-2xl font-bold text-black mb-3">¥<%= number_with_delimiter(product.price.to_i) %></p>
+                <p class="text-gray-600 mb-3 line-clamp-2"><%= truncate(product.description, length: 60) %></p>
+                <p class="text-sm text-gray-500 mb-4">出品者: <%= product.user.name %></p>
+                <%= link_to product_path(product), 
+                    class: "w-full bg-black text-white font-medium py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200 text-center block no-underline" do %>
+                  詳細を見る
+                <% end %>
+              </div>
             </div>
-
-            <!-- 商品カード2 -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
-                <div class="relative">
-                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
-                        <span class="text-gray-500 text-sm">商品画像B</span>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">ダミー商品B (長めの名前)</h3>
-                    <p class="text-2xl font-bold text-black mb-3">¥5,980</p>
-                    <p class="text-gray-600 mb-4 line-clamp-2">機能性に優れた商品Bです。高品質な素材を使用しています。</p>
-                    <button class="w-full bg-black text-white font-medium py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
-                        詳細を見る
-                    </button>
-                </div>
+          <% end %>
+          
+          <!-- 商品がない場合の表示 -->
+          <% if @products.empty? %>
+            <div class="col-span-4 text-center py-16">
+              <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M6 12h12"></path>
+              </svg>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">まだ商品が出品されていません</h3>
+              <p class="text-gray-500 mb-6">あなたが最初の出品者になりませんか？</p>
+              <% if user_signed_in? %>
+                <%= link_to "商品を出品する", listing_products_path, 
+                    class: "bg-red-500 text-white font-medium py-3 px-6 rounded-md hover:bg-red-600 transition duration-200 no-underline" %>
+              <% else %>
+                <%= link_to "ログインして出品する", new_user_session_path, 
+                    class: "bg-red-500 text-white font-medium py-3 px-6 rounded-md hover:bg-red-600 transition duration-200 no-underline" %>
+              <% end %>
             </div>
-
-            <!-- 商品カード3 -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
-                <div class="relative">
-                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
-                        <span class="text-gray-500 text-sm">商品画像C</span>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">ダミー商品C</h3>
-                    <p class="text-2xl font-bold text-black mb-3">¥8,500</p>
-                    <p class="text-gray-600 mb-4 line-clamp-2">人気の商品Cです。多くのお客様にご愛用いただいています。</p>
-                    <button class="w-full bg-black text-white font-medium py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
-                        詳細を見る
-                    </button>
-                </div>
-            </div>
-
-            <!-- 商品カード4 -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
-                <div class="relative">
-                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
-                        <span class="text-gray-500 text-sm">商品画像D</span>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">ダミー商品D</h3>
-                    <p class="text-2xl font-bold text-black mb-3">¥15,800</p>
-                    <p class="text-gray-600 mb-4 line-clamp-2">プレミアムな商品Dです。特別な仕様でお作りしています。</p>
-                    <button class="w-full bg-black text-white font-medium py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
-                        詳細を見る
-                    </button>
-                </div>
-            </div>
+          <% end %>
         </div>
 
         <!-- もっと見るボタン -->
         <div class="text-center mt-12">
-            <button class="bg-white text-black border-2 border-black font-medium py-3 px-8 rounded-md hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200">
+            <%= link_to products_path, class: "bg-white text-black border-2 border-black font-medium py-3 px-8 rounded-md hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition duration-200 no-underline" do %>
                 もっと見る
-            </button>
+            <% end %>
         </div>
     </main>
 
@@ -300,29 +277,10 @@
             }
         });
 
-        // ボタンクリックイベント
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                if (this.textContent.includes('詳細を見る')) {
-                    e.preventDefault();
-                    alert('商品詳細ページはまだ実装されていません');
-                } else if (this.textContent.includes('出品')) {
-                    e.preventDefault();
-                    alert('出品ページはまだ実装されていません');
-                } else if (this.textContent.includes('もっと見る')) {
-                    e.preventDefault();
-                    alert('さらなる商品読み込み機能はバックエンドの実装が必要です');
-                }
-            });
-        });
-
-        // マイページと履歴のアラート
+        // 履歴のアラート（未実装ページのみ）
         document.querySelectorAll('a[href="#"]').forEach(link => {
             link.addEventListener('click', function(e) {
-                if (this.textContent.includes('マイページ')) {
-                    e.preventDefault();
-                    alert('マイページはまだ実装されていません');
-                } else if (this.textContent.includes('履歴')) {
+                if (this.textContent.includes('履歴')) {
                     e.preventDefault();
                     alert('履歴ページはまだ実装されていません');
                 }
